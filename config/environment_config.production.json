@@ -1,0 +1,23 @@
+{
+    "AppEnvironment": 3,
+    "Port": 9000,
+
+    "SharedMongoURL": "TBD",
+    "AppMongoURL": "TBD",
+    "SharedDatabaseName": "shared",
+    "AppDatabaseName": "passman",
+
+    "SharedRedisURL": "TBD",
+    "SharedRedisPasswd": "",
+    "AppRedisURL": "TBD",
+    "AppRedisPasswd": "",
+
+    "SharedMetadataSourceURL": "",
+    "AppMetadataSourceURL": "",
+    "MetadataAutoUpdaterPollSeconds": 600,
+
+    "AdminToolConfig": {
+        "SharedMetadataS3BucketName": "spacetimi-shared-production",
+        "AppMetadataS3BucketName": "spacetimi-passman-production"
+    }
+}

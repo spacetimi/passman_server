@@ -1,0 +1,23 @@
+{
+    "AppEnvironment": 0,
+    "Port": 9000,
+
+    "SharedMongoURL": "mongodb://localhost:27017",
+    "AppMongoURL": "mongodb://localhost:27017",
+    "SharedDatabaseName": "shared",
+    "AppDatabaseName": "passman",
+
+    "SharedRedisURL": "localhost:6379",
+    "SharedRedisPasswd": "",
+    "AppRedisURL": "localhost:6379",
+    "AppRedisPasswd": "",
+
+    "SharedMetadataSourceURL": "local",
+    "AppMetadataSourceURL": "local",
+    "MetadataAutoUpdaterPollSeconds": 10,
+
+    "AdminToolConfig": {
+        "SharedMetadataS3BucketName": "na",
+        "AppMetadataS3BucketName": "na"
+    }
+}

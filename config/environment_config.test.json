@@ -1,0 +1,23 @@
+{
+    "AppEnvironment": 1,
+    "Port": 9000,
+
+    "SharedMongoURL": "mongodb+srv://root:netapp1!@passman-envtest-yb8td.mongodb.net/test?retryWrites=true&w=majority",
+    "AppMongoURL": "mongodb+srv://root:netapp1!@passman-envtest-yb8td.mongodb.net/test?retryWrites=true&w=majority",
+    "SharedDatabaseName": "shared",
+    "AppDatabaseName": "passman",
+
+    "SharedRedisURL": "redis-16380.c8.us-east-1-2.ec2.cloud.redislabs.com:16380",
+    "SharedRedisPasswd": "netapp1!",
+    "AppRedisURL": "redis-16380.c8.us-east-1-2.ec2.cloud.redislabs.com:16380",
+    "AppRedisPasswd": "netapp1!",
+
+    "SharedMetadataSourceURL": "https://spacetimi-shared-test.s3.amazonaws.com/metadata",
+    "AppMetadataSourceURL": "https://spacetimi-passman-test.s3.amazonaws.com/metadata",
+    "MetadataAutoUpdaterPollSeconds": 300,
+
+    "AdminToolConfig": {
+        "SharedMetadataS3BucketName": "spacetimi-shared-test",
+        "AppMetadataS3BucketName": "spacetimi-passman-test"
+    }
+}
