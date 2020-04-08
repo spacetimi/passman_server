@@ -1,3 +1,3 @@
 package app_routes
 
-const Home = "/home"
+const Login = "/login"
