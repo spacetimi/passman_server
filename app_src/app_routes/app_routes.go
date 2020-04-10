@@ -4,3 +4,4 @@ const Home = ""
 const HomeSlash = "/"
 
 const Login = "/login"
+const CreateUser = "/createUser"

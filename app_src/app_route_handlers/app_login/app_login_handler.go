@@ -23,6 +23,7 @@ func NewAppLoginHandler() *AppLoginHandler {
 func (alh *AppLoginHandler) Routes() []controller.Route {
     return []controller.Route {
         controller.NewRoute(app_routes.Login, []controller.RequestMethodType{controller.GET, controller.POST}),
+        controller.NewRoute(app_routes.CreateUser, []controller.RequestMethodType{controller.GET, controller.POST}),
     }
 }
 
@@ -30,14 +31,50 @@ func (alh *AppLoginHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, 
 
     // Parse templates for every request on LOCAL so that we can iterate over the templates
     // without having to restart the server every time
-    forceReparse := config.GetEnvironmentConfiguration().AppEnvironment == config.LOCAL
+    forceReparseTemplates := config.GetEnvironmentConfiguration().AppEnvironment == config.LOCAL
+
+    switch request.URL.Path {
+
+    case app_routes.Login:
+        alh.handleLogin(httpResponseWriter, request, forceReparseTemplates)
+
+    case app_routes.CreateUser:
+        alh.handleCreateUser(httpResponseWriter, request, forceReparseTemplates)
+
+    default:
+        logger.LogError("unknown route request|request url=" + request.URL.Path)
+        httpResponseWriter.WriteHeader(http.StatusNotFound)
+    }
+}
+
+func (alh *AppLoginHandler) handleLogin(httpResponseWriter http.ResponseWriter,
+                                        request *http.Request,
+                                        forceReparseTemplates bool) {
+
     err := alh.TemplatedWriter.Render(httpResponseWriter,
                          "app_login_page_template.html",
                          nil,
-                                      forceReparse)
+                                      forceReparseTemplates)
     if err != nil {
         logger.LogError("Error executing templates" +
-                        "|request url=" + request.URL.String() +
+                        "|request url=" + request.URL.Path +
+                        "|error=" + err.Error())
+        httpResponseWriter.WriteHeader(http.StatusInternalServerError)
+        return
+    }
+}
+
+func (alh *AppLoginHandler) handleCreateUser(httpResponseWriter http.ResponseWriter,
+                                             request *http.Request,
+                                             forceReparseTemplates bool) {
+
+    err := alh.TemplatedWriter.Render(httpResponseWriter,
+                         "app_create_user_page_template.html",
+                         nil,
+                                      forceReparseTemplates)
+    if err != nil {
+        logger.LogError("Error executing templates" +
+                        "|request url=" + request.URL.Path +
                         "|error=" + err.Error())
         httpResponseWriter.WriteHeader(http.StatusInternalServerError)
         return
