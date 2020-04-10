@@ -28,7 +28,13 @@ func (alh *AppLoginHandler) Routes() []controller.Route {
 
 func (alh *AppLoginHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
 
-    err := alh.TemplatedWriter.Render(httpResponseWriter, "app_login_page_template.html", nil)
+    // Parse templates for every request on LOCAL so that we can iterate over the templates
+    // without having to restart the server every time
+    forceReparse := config.GetEnvironmentConfiguration().AppEnvironment == config.LOCAL
+    err := alh.TemplatedWriter.Render(httpResponseWriter,
+                         "app_login_page_template.html",
+                         nil,
+                                      forceReparse)
     if err != nil {
         logger.LogError("Error executing templates" +
                         "|request url=" + request.URL.String() +
