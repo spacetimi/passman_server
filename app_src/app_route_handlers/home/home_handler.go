@@ -18,5 +18,15 @@ func (ahh *HomeHandler) Routes() []controller.Route {
 }
 
 func (ahh *HomeHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
+    if !isUserLoggedIn() {
+        http.Redirect(httpResponseWriter, request, app_routes.Login, http.StatusSeeOther)
+        return
+    }
+
     _, _ = fmt.Fprintln(httpResponseWriter, "home")
+}
+
+func isUserLoggedIn() bool {
+    // TODO: Implement
+    return false
 }
