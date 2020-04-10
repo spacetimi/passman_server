@@ -1,7 +1,6 @@
 package app_init
 
 import (
-	"errors"
 	"github.com/spacetimi/timi_shared_server/code/core/services/metadata_service/metadata_factory"
 	"github.com/spacetimi/timi_shared_server/code/core/services/metadata_service/metadata_typedefs"
 	"github.com/spacetimi/timi_shared_server/code/core/shared_init"
@@ -19,11 +18,6 @@ var appInitializer AppInitializer
 func (appInitializer *AppInitializer) AppInit() error {
 
 	registerMetadataFactories()
-
-	err := InitializeAppController()
-	if err != nil {
-		return errors.New("error initializing app_controller: " + err.Error())
-	}
 
 	return nil
 }
