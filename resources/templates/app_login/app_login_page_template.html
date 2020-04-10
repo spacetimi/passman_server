@@ -1,58 +1,4 @@
-<!doctype html>
-<html lang="en" class="h-100">
-
-<head>
-
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <title>Passman</title>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,600">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-
-    <!-- Favicon and touch icons -->
-    <link rel="shortcut icon" href="assets/ico/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
-
-    <style>
-
-        body, html {
-            height: 100%;
-        }
-        .bg {
-            /* The image used */
-            background-image: url("/app-images/safe.jpg");
-
-            /* Full height */
-            height: 100%;
-
-            /* Center and scale the image nicely */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-
-        .inset {
-            background-color: rgba(200, 200, 200, 0.85);
-
-            /* Center and scale the image nicely */
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        .action-button {
-            background-color: rgba(230, 240, 230, 1.0);
-        }
-
-    </style>
-</head>
-
-<body class="bg h-100">
-
+{{ template "app_login_header_template.html" . }}
 
 <div class="container h-100">
     <div class="row h-100 justify-content-center align-items-center">
@@ -94,10 +40,5 @@
     </div>
 </div>
 
+{{ template "app_login_footer_template.html" . }}
 
-<!-- Javascript -->
-<script src="bootstrap/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
-</body>
-
-</html>
