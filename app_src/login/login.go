@@ -11,7 +11,6 @@ import (
 )
 
 const kCookieName = "passman_login_cookie"
-const kSessionExpirationTimeHours = 8
 
 func TryLoginUserWithCredentials(httpResponseWriter http.ResponseWriter, username string, password string, ctx context.Context) error {
     user, err := identity_service.CheckAndGetUserBlobFromUserLoginCredentials(username, password, ctx)
@@ -27,7 +26,7 @@ func TryLoginUserWithCredentials(httpResponseWriter http.ResponseWriter, usernam
         return errors.New("error creating login token")
     }
 
-    tokenExpiration := time.Now().Add(kSessionExpirationTimeHours * time.Hour)
+    tokenExpiration := time.Now().Add(time.Duration(identity_service.Config.UserSessionExpiryHours) * time.Hour)
 
     cookie := http.Cookie{Name: kCookieName, Value: userLoginToken, Expires: tokenExpiration}
     http.SetCookie(httpResponseWriter, &cookie)
