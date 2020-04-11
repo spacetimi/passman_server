@@ -3,6 +3,7 @@ package app_login
 import (
     "context"
     "errors"
+    "github.com/spacetimi/passman_server/app_src/app_routes"
     "github.com/spacetimi/timi_shared_server/code/core/controller"
     "github.com/spacetimi/timi_shared_server/code/core/services/identity_service"
     "github.com/spacetimi/timi_shared_server/utils/logger"
@@ -21,6 +22,17 @@ func (alh *AppLoginHandler) handleCreateUser(httpResponseWriter http.ResponseWri
         err := tryCreateNewUser(args.PostArgs, request.Context())
         if err != nil {
             pageObject.SetError(err.Error())
+        } else {
+
+            // Show success message and return
+            messageHeader := "Successfully created Account"
+            messageBody := "Login to continue"
+            backlinkName := "<< Login"
+            ShowAppLoginMessagePage(httpResponseWriter,
+                                    messageHeader, messageBody,
+                                    app_routes.Login,
+                                    backlinkName)
+            return
         }
     }
 
