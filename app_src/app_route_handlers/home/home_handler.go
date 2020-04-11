@@ -3,6 +3,7 @@ package home
 import (
     "fmt"
     "github.com/spacetimi/passman_server/app_src/app_routes"
+    "github.com/spacetimi/passman_server/app_src/login"
     "github.com/spacetimi/timi_shared_server/code/core/controller"
     "net/http"
 )
@@ -18,15 +19,12 @@ func (ahh *HomeHandler) Routes() []controller.Route {
 }
 
 func (ahh *HomeHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
-    if !isUserLoggedIn() {
+    user, ok := login.TryGetLoggedInUser(request)
+    if !ok {
         http.Redirect(httpResponseWriter, request, app_routes.Login, http.StatusSeeOther)
         return
     }
 
-    _, _ = fmt.Fprintln(httpResponseWriter, "home")
+    _, _ = fmt.Fprintln(httpResponseWriter, "Welcome, " + user.UserName)
 }
 
-func isUserLoggedIn() bool {
-    // TODO: Implement
-    return false
-}

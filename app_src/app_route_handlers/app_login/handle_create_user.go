@@ -50,7 +50,7 @@ func (alh *AppLoginHandler) handleCreateUser(httpResponseWriter http.ResponseWri
 }
 
 func tryCreateNewUser(postArgs map[string]string, ctx context.Context) error {
-    parsed, err := parsePostArgs(postArgs)
+    parsed, err := parseCreateUserRequestPostArgs(postArgs)
     if parsed == nil {
         return err
     }
@@ -73,7 +73,7 @@ type CreateUserPostArgs struct {
     Password string
 }
 
-func parsePostArgs(postArgs map[string]string) (*CreateUserPostArgs, error) {
+func parseCreateUserRequestPostArgs(postArgs map[string]string) (*CreateUserPostArgs, error) {
     newUsername, ok := postArgs[kPostArgNewUsername]
     if !ok || len(newUsername) == 0 {
         return nil, errors.New("* Please choose a Username")

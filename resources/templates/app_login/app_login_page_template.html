@@ -12,6 +12,15 @@
 
                 <hr/>
 
+                {{ if .HasError }}
+                    <div>
+                        <p class="text-danger">
+                            {{ .ErrorString }}
+                        </p>
+                    </div>
+                {{ end}}
+
+
                 <div class="form-group">
                     <input type="text" class="form-control username" id="username" placeholder="Username..." name="username">
                 </div>
