@@ -36,10 +36,10 @@ func (alh *AppLoginHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, 
     switch request.URL.Path {
 
     case app_routes.Login:
-        alh.handleLogin(httpResponseWriter, request, forceReparseTemplates)
+        alh.handleLogin(httpResponseWriter, request, args, forceReparseTemplates)
 
     case app_routes.CreateUser:
-        alh.handleCreateUser(httpResponseWriter, request, forceReparseTemplates)
+        alh.handleCreateUser(httpResponseWriter, request, args, forceReparseTemplates)
 
     default:
         logger.LogError("unknown route request|request url=" + request.URL.Path)
@@ -47,36 +47,3 @@ func (alh *AppLoginHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, 
     }
 }
 
-func (alh *AppLoginHandler) handleLogin(httpResponseWriter http.ResponseWriter,
-                                        request *http.Request,
-                                        forceReparseTemplates bool) {
-
-    err := alh.TemplatedWriter.Render(httpResponseWriter,
-                         "app_login_page_template.html",
-                         nil,
-                                      forceReparseTemplates)
-    if err != nil {
-        logger.LogError("Error executing templates" +
-                        "|request url=" + request.URL.Path +
-                        "|error=" + err.Error())
-        httpResponseWriter.WriteHeader(http.StatusInternalServerError)
-        return
-    }
-}
-
-func (alh *AppLoginHandler) handleCreateUser(httpResponseWriter http.ResponseWriter,
-                                             request *http.Request,
-                                             forceReparseTemplates bool) {
-
-    err := alh.TemplatedWriter.Render(httpResponseWriter,
-                         "app_create_user_page_template.html",
-                         nil,
-                                      forceReparseTemplates)
-    if err != nil {
-        logger.LogError("Error executing templates" +
-                        "|request url=" + request.URL.Path +
-                        "|error=" + err.Error())
-        httpResponseWriter.WriteHeader(http.StatusInternalServerError)
-        return
-    }
-}

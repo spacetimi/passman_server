@@ -4,13 +4,22 @@
     <div class="row h-100 justify-content-center align-items-center">
         <div class="inset col-10 col-md-8 col-lg-6 rounded border border-secondary pb-3">
 
-            <form class="form-example" action="" method="post">
+            <form class="form-example" action="/createUser" method="post">
 
                 <div class="row h-100 justify-content-center align-items-center pt-1">
                     <h1 class="text-muted">Passman</h1>
                 </div>
 
                 <hr/>
+
+                {{ if .HasError }}
+                    <div>
+                        <p class="text-danger">
+                            {{ .ErrorString }}
+                        </p>
+                    </div>
+                {{ end}}
+
 
                 <div class="form-group">
                     <input type="text" class="form-control username" id="username" placeholder="Username..." name="new_username">
