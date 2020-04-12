@@ -1,27 +1,81 @@
 {{ template "home_header_template.html" . }}
 
-<!-- Nav tabs -->
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="nav-item">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">Messages</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Settings</a>
-    </li>
-</ul>
+<style>
+    .nav-tabs .nav-link:not(.active) {
+        background-color: beige;
+        border-color: gray !important;
+        border-bottom-width: thin !important;
+    }
 
-<!-- Tab panes -->
-<div class="tab-content">
-    <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">.1.</div>
-    <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">.2.</div>
-    <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">.3.</div>
-    <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">.4.</div>
+    .active {
+        border-bottom-color: transparent !important;
+    }
+</style>
+
+<div class="container">
+
+    <br/>
+    <br/>
+    <br/>
+    <div class="row">
+
+        <div class="col-md-1"></div>
+
+        <div class="col-md-10">
+
+            <ul class="nav nav-tabs nav-fill" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active border border-dark" id="websites-tab" data-toggle="tab" href="#websites" role="tab" aria-controls="websites" aria-selected="true">
+                        <h4 class="text-muted">My Websites</h4>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link border border-dark" id="secrets-tab" data-toggle="tab" href="#secrets" role="tab" aria-controls="secrets" aria-selected="false">
+                        <h4 class="text-muted">Secrets</h4>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link border border-dark" id="vault-tab" data-toggle="tab" href="#vault" role="tab" aria-controls="vault" aria-selected="false">
+                        <h4 class="text-muted">Vault</h4>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content border border-dark rounded-bottom border-top-0 bg-white">
+                <div class="tab-pane active" id="websites" role="tabpanel" aria-labelledby="websites-tab">
+                    <div class="container">
+                        <br/>
+                        <br/>
+                        <h6>Gmail</h6>
+                        <br/>
+                        <h6>Facebook</h6>
+                        <br/>
+                        <h6>Amazon.com</h6>
+                        <br/>
+                        <h6>Amazon.in</h6>
+                        <br/>
+                        <h6>Twitter</h6>
+                        <br/>
+                    </div>
+
+                </div>
+
+                <div class="tab-pane" id="secrets" role="tabpanel" aria-labelledby="secrets-tab">
+                    Secrets
+                </div>
+
+
+                <div class="tab-pane" id="vault" role="tabpanel" aria-labelledby="vault-tab">
+                    Vault
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-1"></div>
+
+    </div>
+
 </div>
 
 {{ template "home_footer_template.html" . }}
