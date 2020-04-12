@@ -48,3 +48,8 @@ func TryGetLoggedInUser(request *http.Request) (*identity_service.UserBlob, bool
     return user, true
 }
 
+func LogoutUser(httpResponseWriter http.ResponseWriter) {
+    cookie := http.Cookie{Name: kCookieName, Value: "", Expires: time.Now()}
+    http.SetCookie(httpResponseWriter, &cookie)
+}
+

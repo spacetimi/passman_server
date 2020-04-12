@@ -5,3 +5,4 @@ const HomeSlash = "/"
 
 const Login = "/login"
 const CreateUser = "/createUser"
+const Logout = "/logout"

@@ -24,6 +24,7 @@ func (alh *AppLoginHandler) Routes() []controller.Route {
     return []controller.Route {
         controller.NewRoute(app_routes.Login, []controller.RequestMethodType{controller.GET, controller.POST}),
         controller.NewRoute(app_routes.CreateUser, []controller.RequestMethodType{controller.GET, controller.POST}),
+        controller.NewRoute(app_routes.Logout, []controller.RequestMethodType{controller.GET, controller.POST}),
     }
 }
 
@@ -40,6 +41,9 @@ func (alh *AppLoginHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, 
 
     case app_routes.CreateUser:
         alh.handleCreateUser(httpResponseWriter, request, args, forceReparseTemplates)
+
+    case app_routes.Logout:
+        alh.handleLogout(httpResponseWriter, request, args, forceReparseTemplates)
 
     default:
         logger.LogError("unknown route request|request url=" + request.URL.Path)
