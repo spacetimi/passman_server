@@ -12,7 +12,7 @@ type AppController struct { // Implements IAppController
 func (ac *AppController) RouteHandlers() []controller.IRouteHandler {
     return []controller.IRouteHandler {
         app_login.NewAppLoginHandler(),
-        &home.HomeHandler{},
+        home.NewHomeHandler(),
     }
 }
 
