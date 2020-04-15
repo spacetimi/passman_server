@@ -15,8 +15,7 @@ const kPostArgPassword = "password"
 
 func (alh *AppLoginHandler) handleLogin(httpResponseWriter http.ResponseWriter,
                                         request *http.Request,
-                                        args *controller.HandlerFuncArgs,
-                                        forceReparseTemplates bool) {
+                                        args *controller.HandlerFuncArgs) {
 
     pageObject := newLoginPageObject()
 
@@ -34,8 +33,7 @@ func (alh *AppLoginHandler) handleLogin(httpResponseWriter http.ResponseWriter,
 
     err := alh.TemplatedWriter.Render(httpResponseWriter,
                          "app_login_page_template.html",
-                                      pageObject,
-                                      forceReparseTemplates)
+                                      pageObject)
     if err != nil {
         logger.LogError("Error executing templates" +
                         "|request url=" + request.URL.Path +

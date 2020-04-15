@@ -10,11 +10,4 @@ func (po *LoginPageObjectBase) SetError(errorString string) {
     po.ErrorString = errorString
 }
 
-////////////////////////////////////////////////////////////////////////////////
 
-type AppLoginMessagePageObject struct {
-    MessageHeader string
-    MessageBody string
-    BackLinkHref string
-    BackLinkHrefName string
-}

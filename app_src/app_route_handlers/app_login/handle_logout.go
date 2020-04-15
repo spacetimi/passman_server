@@ -9,8 +9,7 @@ import (
 
 func (alh *AppLoginHandler) handleLogout(httpResponseWriter http.ResponseWriter,
                                         request *http.Request,
-                                        args *controller.HandlerFuncArgs,
-                                        forceReparseTemplates bool) {
+                                        args *controller.HandlerFuncArgs) {
 
     login.LogoutUser(httpResponseWriter)
     http.Redirect(httpResponseWriter, request, app_routes.Login, http.StatusSeeOther)

@@ -1,4 +1,4 @@
-package app_login
+package app_simple_message_page
 
 import (
     "github.com/spacetimi/timi_shared_server/code/config"
@@ -7,24 +7,23 @@ import (
     "net/http"
 )
 
-func ShowAppLoginMessagePage(httpResponseWriter http.ResponseWriter,
+func ShowAppSimpleMessagePage(httpResponseWriter http.ResponseWriter,
                              messageHeader string,
                              messageBody string,
                              backlinkHref string,
                              backlinkHrefName string) {
 
-    pageObject := &AppLoginMessagePageObject{
+    pageObject := &AppSimpleMessagePageObject{
         MessageHeader:messageHeader,
         MessageBody:messageBody,
         BackLinkHref:backlinkHref,
         BackLinkHrefName:backlinkHrefName,
     }
 
-    page := newAppLoginMessagePage()
+    page := newAppSimpleMessagePage()
     err := page.Render(httpResponseWriter,
-          "app_login_message_page_template.html",
-                       pageObject,
-                       config.GetEnvironmentConfiguration().AppEnvironment == config.LOCAL)
+          "app_simple_message_page_template.html",
+                       pageObject)
     if err != nil {
         logger.LogError("error showing login message page|error=" + err.Error())
         httpResponseWriter.WriteHeader(http.StatusInternalServerError)
@@ -33,14 +32,24 @@ func ShowAppLoginMessagePage(httpResponseWriter http.ResponseWriter,
 
 ////////////////////////////////////////////////////////////////////////////////
 
-type AppLoginMessagePage struct {
+type AppSimpleMessagePage struct {
     *templated_writer.TemplatedWriter
 }
 
-func newAppLoginMessagePage() *AppLoginMessagePage {
-    almp := &AppLoginMessagePage{}
-    almp.TemplatedWriter = templated_writer.NewTemplatedWriter(config.GetAppTemplateFilesPath() + "/app_login")
+func newAppSimpleMessagePage() *AppSimpleMessagePage {
+    almp := &AppSimpleMessagePage{}
+    almp.TemplatedWriter = templated_writer.NewTemplatedWriter(config.GetAppTemplateFilesPath() + "/simple_message_page")
+
+    // Parse templates for every request on LOCAL so that we can iterate over the templates
+    // without having to restart the server every time
+    almp.TemplatedWriter.ForceReparseTemplates = config.GetEnvironmentConfiguration().AppEnvironment == config.LOCAL
 
     return almp
 }
 
+type AppSimpleMessagePageObject struct {
+    MessageHeader string
+    MessageBody string
+    BackLinkHref string
+    BackLinkHrefName string
+}

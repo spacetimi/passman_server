@@ -17,6 +17,10 @@ func NewAppLoginHandler() *AppLoginHandler {
     alh := &AppLoginHandler{}
     alh.TemplatedWriter = templated_writer.NewTemplatedWriter(config.GetAppTemplateFilesPath() + "/app_login")
 
+    // Parse templates for every request on LOCAL so that we can iterate over the templates
+    // without having to restart the server every time
+    alh.TemplatedWriter.ForceReparseTemplates = config.GetEnvironmentConfiguration().AppEnvironment == config.LOCAL
+
     return alh
 }
 
@@ -30,20 +34,16 @@ func (alh *AppLoginHandler) Routes() []controller.Route {
 
 func (alh *AppLoginHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
 
-    // Parse templates for every request on LOCAL so that we can iterate over the templates
-    // without having to restart the server every time
-    forceReparseTemplates := config.GetEnvironmentConfiguration().AppEnvironment == config.LOCAL
-
     switch request.URL.Path {
 
     case app_routes.Login:
-        alh.handleLogin(httpResponseWriter, request, args, forceReparseTemplates)
+        alh.handleLogin(httpResponseWriter, request, args)
 
     case app_routes.CreateUser:
-        alh.handleCreateUser(httpResponseWriter, request, args, forceReparseTemplates)
+        alh.handleCreateUser(httpResponseWriter, request, args)
 
     case app_routes.Logout:
-        alh.handleLogout(httpResponseWriter, request, args, forceReparseTemplates)
+        alh.handleLogout(httpResponseWriter, request, args)
 
     default:
         logger.LogError("unknown route request|request url=" + request.URL.Path)

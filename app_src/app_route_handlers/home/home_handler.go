@@ -18,6 +18,10 @@ func NewHomeHandler() *HomeHandler {
     hh := &HomeHandler{}
     hh.TemplatedWriter = templated_writer.NewTemplatedWriter(config.GetAppTemplateFilesPath() + "/home")
 
+    // Parse templates for every request on LOCAL so that we can iterate over the templates
+    // without having to restart the server every time
+    hh.TemplatedWriter.ForceReparseTemplates = config.GetEnvironmentConfiguration().AppEnvironment == config.LOCAL
+
     return hh
 }
 
@@ -25,6 +29,7 @@ func (hh *HomeHandler) Routes() []controller.Route {
     return []controller.Route {
         controller.NewRoute(app_routes.Home, []controller.RequestMethodType{controller.GET, controller.POST}),
         controller.NewRoute(app_routes.HomeSlash, []controller.RequestMethodType{controller.GET, controller.POST}),
+        controller.NewRoute(app_routes.AddNewWebsite, []controller.RequestMethodType{controller.POST}),
     }
 }
 
@@ -37,19 +42,19 @@ func (hh *HomeHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, reque
         return
     }
 
-    pageObject := &HomePageObject{}
-    pageObject.Username = user.UserName
-    pageObject.UserId = user.UserId
+    switch request.URL.Path {
 
-    err := hh.Render(httpResponseWriter,
-        "home_page_template.html",
-                     pageObject,
-                     config.GetEnvironmentConfiguration().AppEnvironment == config.LOCAL)
-    if err != nil {
-        logger.LogError("error rendering home page template" +
-                        "|request url=" + request.URL.Path +
-                        "|error=" + err.Error())
-        httpResponseWriter.WriteHeader(http.StatusInternalServerError)
+    case app_routes.Home:
+        fallthrough
+    case app_routes.HomeSlash:
+        hh.handleHome(user, httpResponseWriter, request, args)
+
+    case app_routes.AddNewWebsite:
+        hh.handleAddNewWebsite(user, httpResponseWriter, request, args)
+
+    default:
+        logger.LogError("unknown route request|request url=" + request.URL.Path)
+        httpResponseWriter.WriteHeader(http.StatusNotFound)
     }
 }
 

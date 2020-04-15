@@ -4,6 +4,7 @@ import (
     "context"
     "errors"
     "github.com/spacetimi/passman_server/app_src/app_routes"
+    "github.com/spacetimi/passman_server/app_src/app_utils/app_simple_message_page"
     "github.com/spacetimi/timi_shared_server/code/core/controller"
     "github.com/spacetimi/timi_shared_server/code/core/services/identity_service"
     "github.com/spacetimi/timi_shared_server/utils/logger"
@@ -13,8 +14,7 @@ import (
 
 func (alh *AppLoginHandler) handleCreateUser(httpResponseWriter http.ResponseWriter,
                                              request *http.Request,
-                                             args *controller.HandlerFuncArgs,
-                                             forceReparseTemplates bool) {
+                                             args *controller.HandlerFuncArgs) {
 
     pageObject := newCreateUserPageObject()
 
@@ -28,18 +28,17 @@ func (alh *AppLoginHandler) handleCreateUser(httpResponseWriter http.ResponseWri
             messageHeader := "Successfully created Account"
             messageBody := "Login to continue"
             backlinkName := "<< Login"
-            ShowAppLoginMessagePage(httpResponseWriter,
-                                    messageHeader, messageBody,
-                                    app_routes.Login,
-                                    backlinkName)
+            app_simple_message_page.ShowAppSimpleMessagePage(httpResponseWriter,
+                                                             messageHeader, messageBody,
+                                                             app_routes.Login,
+                                                             backlinkName)
             return
         }
     }
 
     err := alh.TemplatedWriter.Render(httpResponseWriter,
                          "app_create_user_page_template.html",
-                                      pageObject,
-                                      forceReparseTemplates)
+                                      pageObject)
     if err != nil {
         logger.LogError("Error executing templates" +
                         "|request url=" + request.URL.Path +
