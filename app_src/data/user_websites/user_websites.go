@@ -57,8 +57,28 @@ func Create(userId int64, ctx context.Context) (*UserWebsitesBlob, error) {
     return userWebsites, nil
 }
 
+func (blob *UserWebsitesBlob) GetUserWebsite(websiteName string) *UserWebsite {
+    for _, websiteCredentials := range blob.UserWebsites {
+        if websiteCredentials.WebsiteName == websiteName {
+            return websiteCredentials
+        }
+    }
+
+    return nil
+}
+
+func (userWebsite *UserWebsite) GetCredentialsForUserAlias(userAlias string) *UserWebsiteCredentials {
+    for _, websiteCredentials := range userWebsite.UserWebsiteCredentialsList {
+        if websiteCredentials.UserAlias == userAlias {
+            return websiteCredentials
+        }
+    }
+
+    return nil
+}
+
 func (blob *UserWebsitesBlob) AddOrModifyUserWebsiteCredentials(websiteName string, userAlias string, ctx context.Context) error {
-    userWebsite := blob.getUserWebsite(websiteName)
+    userWebsite := blob.GetUserWebsite(websiteName)
     if userWebsite == nil {
         userWebsite = &UserWebsite{
             WebsiteName:websiteName,
@@ -66,7 +86,7 @@ func (blob *UserWebsitesBlob) AddOrModifyUserWebsiteCredentials(websiteName stri
         blob.UserWebsites = append(blob.UserWebsites, userWebsite)
     }
 
-    credentialsForUserAlias := userWebsite.getCredentialsForUserAlias(userAlias)
+    credentialsForUserAlias := userWebsite.GetCredentialsForUserAlias(userAlias)
     if credentialsForUserAlias == nil {
         credentialsForUserAlias = &UserWebsiteCredentials{
             UserAlias:userAlias,
@@ -102,25 +122,5 @@ func newUserWebsitesBlob(userId int64) *UserWebsitesBlob {
                                                                      true)
 
     return userWebsites
-}
-
-func (blob *UserWebsitesBlob) getUserWebsite(websiteName string) *UserWebsite {
-    for _, websiteCredentials := range blob.UserWebsites {
-        if websiteCredentials.WebsiteName == websiteName {
-            return websiteCredentials
-        }
-    }
-
-    return nil
-}
-
-func (userWebsite *UserWebsite) getCredentialsForUserAlias(userAlias string) *UserWebsiteCredentials {
-    for _, websiteCredentials := range userWebsite.UserWebsiteCredentialsList {
-        if websiteCredentials.UserAlias == userAlias {
-            return websiteCredentials
-        }
-    }
-
-    return nil
 }
 

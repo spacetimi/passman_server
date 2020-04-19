@@ -8,3 +8,4 @@ const CreateUser = "/createUser"
 const Logout = "/logout"
 
 const AddNewWebsite = "/addNewWebsite"
+const ViewPassword = "/viewPassword"

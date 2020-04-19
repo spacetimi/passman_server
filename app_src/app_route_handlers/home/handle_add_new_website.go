@@ -15,7 +15,7 @@ const kPostArgUserAlias   = "userAlias"
 
 func (hh *HomeHandler) handleAddNewWebsite(user *identity_service.UserBlob, httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
 
-    parsedArgs, err := parsePostArgs(args.PostArgs)
+    parsedArgs, err := parseAddNewWebsitePostArgs(args.PostArgs)
     if err != nil {
         // Show error message and return
         messageHeader := "Something went wrong"
@@ -53,7 +53,7 @@ func (hh *HomeHandler) handleAddNewWebsite(user *identity_service.UserBlob, http
     return
 }
 
-func parsePostArgs(postArgs map[string]string) (*AddNewWebsitePostArgs, error) {
+func parseAddNewWebsitePostArgs(postArgs map[string]string) (*AddNewWebsitePostArgs, error) {
     websiteName, ok := postArgs[kPostArgWebsiteName]
     if !ok || len(websiteName) == 0 {
         return nil, errors.New("* website name cannot be empty")
