@@ -1,0 +1,47 @@
+<div class="card">
+    <div class="card-header" id="user-website-name">
+        <h2 class="mb-0">
+            <button class="btn btn-block" type="button" data-toggle="collapse" data-target="#{{ .WebsiteName }}" aria-expanded="false" aria-controls="{{ .WebsiteName }}">
+                <div class="row">
+                    <div class="col-md-6 text-left text-primary">
+                        {{ .WebsiteName }}
+                    </div>
+                </div>
+            </button>
+        </h2>
+    </div>
+
+    <div id="{{ .WebsiteName }}" class="collapse" aria-labelledby="user-website-name" data-parent="#accordionExample">
+        <div class="card-body">
+            <label class="small text-muted">
+            Aliases for {{ .WebsiteName }}:
+            </label>
+            <div class="container-fluid">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        {{ range .UserAliases }}
+                            <span>
+                                <div class="btn-group pt-2 pb-2" role="group">
+                                    <a href="#" target="_blank" class="btn btn-primary border border-secondary rounded-left small">
+                                        {{ . }}&nbsp;<img src="/app-images/view_icon.png">
+                                    </a>
+                                    <a href="#" target="_blank" class="btn btn-warning border border-secondary rounded-right small">
+                                        <img src="/app-images/regenerate_icon.png">
+                                    </a>
+                                </div>
+                            </span>
+                            &nbsp;
+                        {{ end }}
+                        <span>
+                            <div class="btn-group pt-2 pb-2" role="group">
+                                <a href="#" target="_blank" class="btn btn-success border border-dark small">
+                                    Add New&nbsp;<img src="/images/plus.png">
+                                </a>
+                            </div>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

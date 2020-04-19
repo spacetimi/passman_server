@@ -7,32 +7,29 @@
     <br/>
 
     <div class="row">
-        <div class="col-md-2 col-sm-1"></div>
-
-        <div class="col-md-8 col-sm-10">
+        <div class="container-fluid">
             <button type="button" class="btn btn-block action-button border border-info rounded float-left" data-toggle="modal" data-target="#addNewWebsiteModal" data-whatever="@mdo">
                 <h5 class="text-muted"><img src="/images/plus.png" style="margin-bottom: 4px">&nbsp;&nbsp;Add New Website</h5>
             </button>
         </div>
-
-        <div class="col-md-2 col-sm-1"></div>
     </div>
 
+    <br/>
 
     <div>
-        <br/>
-        <br/>
-        <h6>Gmail</h6>
-        <br/>
-        <h6>Facebook</h6>
-        <br/>
-        <h6>Amazon.com</h6>
-        <br/>
-        <h6>Amazon.in</h6>
-        <br/>
-        <h6>Twitter</h6>
-        <br/>
+
+        <div class="accordion" id="accordionExample">
+            <div class="container-fluid bg-secondary rounded-top pt-2 pb-2">
+                <h5 class="text-light">&nbsp;My Websites</h5>
+            </div>
+            {{ range .UserWebsiteCards }}
+                {{ template "user_website_card_template.html" . }}
+            {{ end }}
+        </div>
+
     </div>
+
+    <br/>
 
 
 </div>

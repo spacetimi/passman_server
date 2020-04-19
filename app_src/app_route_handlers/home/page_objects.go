@@ -6,6 +6,13 @@ type HomePageObject struct {
 
     Username string
     UserId int64
+
+    UserWebsiteCards []UserWebsiteCardObject
+}
+
+type UserWebsiteCardObject struct {
+    WebsiteName string
+    UserAliases []string
 }
 
 func (po *HomePageObject) SetError(errorString string) {
