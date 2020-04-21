@@ -66,7 +66,12 @@ func (hh *HomeHandler) handleViewPassword(user *identity_service.UserBlob, httpR
         return
     }
 
-    password, err := password_gen.GeneratePassword(user.UserId, parsedArgs.WebsiteName, parsedArgs.UserAlias, userWebsiteCredentials.Version, parsedArgs.MasterPassword)
+    password, err := password_gen.GeneratePassword(user.UserId,
+                                                   user.CreatedTime,
+                                                   parsedArgs.WebsiteName,
+                                                   parsedArgs.UserAlias,
+                                                   userWebsiteCredentials.Version,
+                                                   parsedArgs.MasterPassword)
     if err != nil {
         // Show error message and return
         messageHeader := "Something went wrong"
