@@ -17,6 +17,8 @@ const kViewPasswordPostArgWebsiteName = "websiteName"
 const kViewPasswordPostArgUserAlias = "userAlias"
 const kViewPasswordPostArgMasterPassword = "masterPassword"
 
+const kTemplateName = "view_password_page_template.html"
+
 func (hh *HomeHandler) handleViewPassword(user *identity_service.UserBlob, httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
 
     parsedArgs, err := parseViewPasswordPostArgs(args.PostArgs)
@@ -83,12 +85,20 @@ func (hh *HomeHandler) handleViewPassword(user *identity_service.UserBlob, httpR
 
 
     // Show password
-    messageHeader := "Password for " + parsedArgs.UserAlias + " @ " + parsedArgs.WebsiteName
-    messageBody := password
-    backlinkName := "<< Home"
-    app_simple_message_page.ShowAppSimpleMessagePage(httpResponseWriter, messageHeader, messageBody, app_routes.HomeSlash, backlinkName)
+    pageObject := &ViewPasswordPageObject{}
+    pageObject.UserAlias = parsedArgs.UserAlias
+    pageObject.WebsiteName = parsedArgs.WebsiteName
+    pageObject.Password = password
+    err = hh.Render(httpResponseWriter, kTemplateName, pageObject)
+    if err != nil {
+        logger.LogError("error showing view-password page" +
+                        "|user id=" + strconv.FormatInt(user.UserId, 10) +
+                        "|website name=" + parsedArgs.WebsiteName +
+                        "|user alias=" + parsedArgs.UserAlias +
+                        "|error=" + err.Error())
+        httpResponseWriter.WriteHeader(http.StatusInternalServerError)
+    }
 }
-
 
 func parseViewPasswordPostArgs(postArgs map[string]string) (*ViewPasswordPostArgs, error) {
     websiteName, ok := postArgs[kViewPasswordPostArgWebsiteName]
