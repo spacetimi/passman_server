@@ -53,15 +53,18 @@
 <body class="bg h-100">
 
 
-<div class="container-fluid bg-dark pt-2 pb-2 pl-2 pr-4">
+<div class="container-fluid pt-2 pb-2 pl-2 pr-4" style="background-color: #111111e0">
     <div class="row">
 
-        <div class="col-md-10 col-sm-8">
-            <h2 class="text-muted">Passman</h2>
+        <div class="col-md-2 col-sm-5">
+            <img src="/app-images/logo-md.png" style="width: fit-content; max-width: 200px">
+        </div>
+
+        <div class="col-md-6 col-sm-2">
         </div>
 
 
-        <div class="col-md-2 col-sm-4 border rounded border-secondary bg-secondary">
+        <div class="col-md-4 col-sm-5 border rounded border-secondary bg-secondary">
             <span class="float-right align-middle">
                 <h6 class="text-light mt-1 mb-1">
                     <small>Logged in as: </small>{{ .Username }}
