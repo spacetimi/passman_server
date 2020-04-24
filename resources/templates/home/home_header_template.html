@@ -52,27 +52,21 @@
 
 <body class="bg h-100">
 
+<div class="pos-f-t">
 
-<div class="container-fluid pt-2 pb-2 pl-2 pr-4" style="background-color: #040404e0">
-    <div class="row">
+    <nav class="navbar navbar-dark bg-dark">
+        <button class="navbar-toggler" style="background-color: #040404e0" type="button" data-toggle="collapse" data-target="#headerCollapsible" aria-controls="headerCollapsible" aria-expanded="false" aria-label="Toggle navigation">
+            <img src="/app-images/logo-silver.png" style="width: fit-content; max-width: 120px">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
 
-        <div class="col-md-2 col-sm-5">
-            <img src="/app-images/logo-silver.png" style="width: fit-content; max-width: 200px">
+    <div class="collapse" id="headerCollapsible">
+        <div class="bg-dark p-4 text-light">
+            <small class="text-secondary">Logged in as: </small>{{ .Username }}
+            <br/>
+            <a href="/logout" class="text-warning"><u>Log out</u></a>
         </div>
-
-        <div class="col-md-6 col-sm-2">
-        </div>
-
-
-        <div class="col-md-4 col-sm-5 border rounded border-secondary bg-secondary">
-            <span class="float-right align-middle">
-                <h6 class="text-light mt-1 mb-1">
-                    <small>Logged in as: </small>{{ .Username }}
-                    <br/>
-                    <a href="/logout" class="text-warning float-right"><u>Log out</u></a>
-                </h6>
-            </span>
-        </div>
-
     </div>
 </div>
+
