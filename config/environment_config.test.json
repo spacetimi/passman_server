@@ -1,6 +1,7 @@
 {
     "AppEnvironment": 1,
     "Port": 9000,
+    "ApiServerBaseURL": "TBD",
 
     "SharedMongoURL": "mongodb+srv://root:netapp1!@passman-envtest-yb8td.mongodb.net/test?retryWrites=true&w=majority",
     "AppMongoURL": "mongodb+srv://root:netapp1!@passman-envtest-yb8td.mongodb.net/test?retryWrites=true&w=majority",

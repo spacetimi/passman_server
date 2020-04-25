@@ -1,6 +1,7 @@
 {
     "AppEnvironment": 3,
     "Port": 9000,
+    "ApiServerBaseURL": "TBD",
 
     "SharedMongoURL": "TBD",
     "AppMongoURL": "TBD",

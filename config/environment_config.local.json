@@ -1,6 +1,7 @@
 {
     "AppEnvironment": 0,
     "Port": 9000,
+    "ApiServerBaseURL": "127.0.0.1",
 
     "SharedMongoURL": "mongodb://localhost:27017",
     "AppMongoURL": "mongodb://localhost:27017",
