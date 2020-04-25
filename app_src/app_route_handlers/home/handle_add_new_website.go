@@ -7,13 +7,15 @@ import (
     "github.com/spacetimi/passman_server/app_src/data/user_websites"
     "github.com/spacetimi/timi_shared_server/code/core/controller"
     "github.com/spacetimi/timi_shared_server/code/core/services/identity_service"
+    "github.com/spacetimi/timi_shared_server/utils/logger"
     "net/http"
+    "strconv"
 )
 
 const kPostArgWebsiteName = "websiteName"
 const kPostArgUserAlias   = "userAlias"
 
-func (hh *HomeHandler) handleAddNewWebsite(user *identity_service.UserBlob, httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
+func (hh *HomeHandler) handleAddOrModifyUserWebsiteCredentials(user *identity_service.UserBlob, httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
 
     parsedArgs, err := parseAddNewWebsitePostArgs(args.PostArgs)
     if err != nil {
@@ -47,7 +49,19 @@ func (hh *HomeHandler) handleAddNewWebsite(user *identity_service.UserBlob, http
 
     // Show Success message and return
     messageHeader := "Success"
-    messageBody := "Added " + parsedArgs.UserAlias + " @ " + parsedArgs.WebsiteName + " to list of credentials"
+    var messageBody string
+    switch request.URL.Path {
+    case app_routes.AddNewWebsite:
+        messageBody = "Added " + parsedArgs.UserAlias + " @ " + parsedArgs.WebsiteName + " to list of credentials"
+    case app_routes.GenerateNewPassword:
+        messageBody = "Generated new password for " + parsedArgs.UserAlias + " @ " + parsedArgs.WebsiteName
+    default:
+        logger.LogError("invalid request url" +
+                        "|request url=" + request.URL.Path +
+                        "|user id=" + strconv.FormatInt(user.UserId, 10))
+        httpResponseWriter.WriteHeader(http.StatusInternalServerError)
+        return
+    }
     backlinkName := "<< Home"
     app_simple_message_page.ShowAppSimpleMessagePage(httpResponseWriter, messageHeader, messageBody, app_routes.HomeSlash, backlinkName)
     return
