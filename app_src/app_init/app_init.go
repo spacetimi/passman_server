@@ -1,6 +1,7 @@
 package app_init
 
 import (
+	"github.com/spacetimi/passman_server/app_src/app_utils/app_emailer"
 	"github.com/spacetimi/timi_shared_server/code/core/services/metadata_service/metadata_factory"
 	"github.com/spacetimi/timi_shared_server/code/core/services/metadata_service/metadata_typedefs"
 	"github.com/spacetimi/timi_shared_server/code/core/shared_init"
@@ -18,6 +19,8 @@ var appInitializer AppInitializer
 func (appInitializer *AppInitializer) AppInit() error {
 
 	registerMetadataFactories()
+
+	app_emailer.Initialize()
 
 	return nil
 }
