@@ -70,6 +70,7 @@ func trySendPasswordResetEmail(postArgs map[string]string, ctx context.Context) 
     email := email_utils.Email{
                 Subject: "Password reset instructions for your PassMan account",
                 Body: "Click here to reset your password: " + resetPasswordLink + "\n" +
+                      // TODO: Don't hard-code 2 days here
                       "This link will be active for 2 days.",
              }
 

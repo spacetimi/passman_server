@@ -20,7 +20,7 @@ func GenerateResetAccountPasswordLink(user *identity_service.UserBlob) (string, 
     randomString := strconv.FormatInt(user.UserId, 10) + ":" + strconv.Itoa(rand.Intn(math.MaxInt32))
     redisKey := encryption_utils.Generate_md5_hash(randomString)
 
-    err := redis_adaptor.Write(redisKey, strconv.FormatInt(user.UserId, 10))
+    err := redis_adaptor.Write(redisKey, strconv.FormatInt(user.UserId, 10), 48 * time.Hour)
     if err != nil {
         logger.LogError("error writing password reset information to redis" +
                         "|user id=" + strconv.FormatInt(user.UserId, 10) +
