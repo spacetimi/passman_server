@@ -8,6 +8,9 @@ const CreateUser = "/createUser"
 const ForgotUsernameOrPassword = "/forgotUsernameOrPassword"
 const Logout = "/logout"
 
+const ResetPasswordBase = "/resetPassword/"
+const ResetPassword = ResetPasswordBase + "{rediskey}"
+
 const AddNewWebsite = "/addNewWebsite"
 const GenerateNewPassword = "/generateNewPassword"
 const ViewPassword = "/viewPassword"

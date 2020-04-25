@@ -7,6 +7,7 @@ import (
     "github.com/spacetimi/timi_shared_server/utils/logger"
     "github.com/spacetimi/timi_shared_server/utils/templated_writer"
     "net/http"
+    "path/filepath"
 )
 
 type AppLoginHandler struct {     // Implements IRouteHandler
@@ -29,29 +30,40 @@ func (alh *AppLoginHandler) Routes() []controller.Route {
         controller.NewRoute(app_routes.Login, []controller.RequestMethodType{controller.GET, controller.POST}),
         controller.NewRoute(app_routes.CreateUser, []controller.RequestMethodType{controller.GET, controller.POST}),
         controller.NewRoute(app_routes.ForgotUsernameOrPassword, []controller.RequestMethodType{controller.GET, controller.POST}),
+        controller.NewRoute(app_routes.ResetPassword, []controller.RequestMethodType{controller.GET, controller.POST}),
         controller.NewRoute(app_routes.Logout, []controller.RequestMethodType{controller.GET, controller.POST}),
     }
 }
 
 func (alh *AppLoginHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
 
+    /* Handle simple routes */
     switch request.URL.Path {
 
     case app_routes.Login:
         alh.handleLogin(httpResponseWriter, request, args)
+        return
 
     case app_routes.CreateUser:
         alh.handleCreateUser(httpResponseWriter, request, args)
+        return
 
     case app_routes.ForgotUsernameOrPassword:
         alh.handleForgotUsernameOrPassword(httpResponseWriter, request, args)
+        return
 
     case app_routes.Logout:
         alh.handleLogout(httpResponseWriter, request, args)
-
-    default:
-        logger.LogError("unknown route request|request url=" + request.URL.Path)
-        httpResponseWriter.WriteHeader(http.StatusNotFound)
+        return
     }
+
+    /* Handle routes with path vars */
+    if app_routes.ResetPasswordBase == filepath.Dir(request.URL.Path) + "/" {
+        alh.handleResetPassword(httpResponseWriter, request, args)
+        return
+    }
+
+    logger.LogError("unknown route request|request url=" + request.URL.Path)
+    httpResponseWriter.WriteHeader(http.StatusNotFound)
 }
 

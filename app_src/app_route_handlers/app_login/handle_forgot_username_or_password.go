@@ -6,6 +6,7 @@ import (
     "github.com/spacetimi/passman_server/app_src/app_routes"
     "github.com/spacetimi/passman_server/app_src/app_utils/app_emailer"
     "github.com/spacetimi/passman_server/app_src/app_utils/app_simple_message_page"
+    "github.com/spacetimi/passman_server/app_src/login"
     "github.com/spacetimi/timi_shared_server/code/core/controller"
     "github.com/spacetimi/timi_shared_server/code/core/services/identity_service"
     "github.com/spacetimi/timi_shared_server/utils/email_utils"
@@ -51,7 +52,7 @@ func (alh *AppLoginHandler) handleForgotUsernameOrPassword(httpResponseWriter ht
 }
 
 func trySendPasswordResetEmail(postArgs map[string]string, ctx context.Context) error {
-    userEmailAddress, err := parsePostArgsForResetPassword(postArgs)
+    userEmailAddress, err := parsePostArgsForForgotPassword(postArgs)
     if err != nil {
         return err
     }
@@ -61,9 +62,14 @@ func trySendPasswordResetEmail(postArgs map[string]string, ctx context.Context) 
         return errors.New("* Couldn't find any registered user for " + userEmailAddress)
     }
 
+    resetPasswordLink, err := login.GenerateResetAccountPasswordLink(user)
+    if err != nil {
+        return errors.New("* Something went wrong. Please try again")
+    }
+
     email := email_utils.Email{
                 Subject: "Password reset instructions for your PassMan account",
-                Body: "Click here to reset your password.\n" +
+                Body: "Click here to reset your password: " + resetPasswordLink + "\n" +
                       "This link will be active for 2 days.",
              }
 
@@ -77,7 +83,7 @@ func trySendPasswordResetEmail(postArgs map[string]string, ctx context.Context) 
 
 const kPostArgUserEmailAddress = "userEmailAddress"
 
-func parsePostArgsForResetPassword(postArgs map[string]string) (string, error) {
+func parsePostArgsForForgotPassword(postArgs map[string]string) (string, error) {
     userEmailAddress, ok := postArgs[kPostArgUserEmailAddress]
     if !ok || len(userEmailAddress) == 0 {
         return "", errors.New("* Enter email address")
