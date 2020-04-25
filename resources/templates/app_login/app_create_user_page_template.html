@@ -22,7 +22,20 @@
 
 
                 <div class="form-group">
-                    <input type="text" class="form-control username" id="username" placeholder="Username..." name="new_username">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">User name</span>
+                        </div>
+                        <input type="text" name="new_username" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1">
+                    </div>
+
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Email address</span>
+                        </div>
+                        <input type="text" name="new_useremail" class="form-control" placeholder="" aria-label="UserEmail" aria-describedby="basic-addon1">
+                    </div>
                 </div>
                 <div class="form-group">
                     <input type="password" class="form-control password" id="password" placeholder="Password..." name="new_password">

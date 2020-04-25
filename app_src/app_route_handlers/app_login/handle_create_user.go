@@ -54,7 +54,7 @@ func tryCreateNewUser(postArgs map[string]string, ctx context.Context) error {
         return err
     }
 
-    _, err = identity_service.CreateNewUserByUserNameAndPassword(parsed.Username, parsed.Password, ctx)
+    _, err = identity_service.CreateNewUser(parsed.Username, parsed.Password, parsed.EmailAddress, ctx)
     if err != nil {
         return errors.New("* Error creating new user: " + err.Error())
     }
@@ -64,18 +64,25 @@ func tryCreateNewUser(postArgs map[string]string, ctx context.Context) error {
 
 
 const kPostArgNewUsername = "new_username"
+const kPostArgNewUserEmail = "new_useremail"
 const kPostArgNewPassword = "new_password"
 const kPostArgRetypePassword = "retype_password"
 
 type CreateUserPostArgs struct {
     Username string
     Password string
+    EmailAddress string
 }
 
 func parseCreateUserRequestPostArgs(postArgs map[string]string) (*CreateUserPostArgs, error) {
     newUsername, ok := postArgs[kPostArgNewUsername]
     if !ok || len(newUsername) == 0 {
         return nil, errors.New("* Please choose a Username")
+    }
+
+    newUserEmail, ok := postArgs[kPostArgNewUserEmail]
+    if !ok || len(newUserEmail) == 0 {
+        return nil, errors.New("* Please enter your email address")
     }
 
     newPassword, ok := postArgs[kPostArgNewPassword]
@@ -101,6 +108,7 @@ func parseCreateUserRequestPostArgs(postArgs map[string]string) (*CreateUserPost
     return &CreateUserPostArgs{
                 Username:newUsername,
                 Password:newPassword,
+                EmailAddress:newUserEmail,
             }, nil
 }
 
