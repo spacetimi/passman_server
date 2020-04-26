@@ -13,15 +13,15 @@ import (
     "time"
 )
 
-func GenerateResetAccountPasswordRedisObject(user *identity_service.UserBlob) (string, error) {
+func GenerateNewAccountActivationRedisObject(user *identity_service.UserBlob) (string, error) {
 
     rand.Seed(time.Now().Unix())
     randomString := strconv.FormatInt(user.UserId, 10) + ":" + strconv.Itoa(rand.Intn(math.MaxInt32))
-    redisKey := config.GetAppName() + ":" + "reset" + ":" + encryption_utils.Generate_md5_hash(randomString)
+    redisKey := config.GetAppName() + ":" + "newacct" + ":" + encryption_utils.Generate_md5_hash(randomString)
 
     err := redis_adaptor.Write(redisKey, strconv.FormatInt(user.UserId, 10), 48 * time.Hour)
     if err != nil {
-        logger.LogError("error writing password reset information to redis" +
+        logger.LogError("error writing new account activation information to redis" +
                         "|user id=" + strconv.FormatInt(user.UserId, 10) +
                         "|error=" + err.Error())
         return "", errors.New("error writing to redis")
@@ -30,7 +30,7 @@ func GenerateResetAccountPasswordRedisObject(user *identity_service.UserBlob) (s
     return redisKey, nil
 }
 
-func GetUserIdFromResetAccountPasswordRedisKey(redisKey string) (int64, error) {
+func GetUserIdFromNewAccountActivationRedisKey(redisKey string) (int64, error) {
 
     redisValue, ok := redis_adaptor.Read(redisKey)
     if !ok || len(redisValue) == 0 {

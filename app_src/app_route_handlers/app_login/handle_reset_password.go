@@ -5,6 +5,7 @@ import (
     "errors"
     "github.com/spacetimi/passman_server/app_src/app_routes"
     "github.com/spacetimi/passman_server/app_src/app_utils/app_simple_message_page"
+    "github.com/spacetimi/passman_server/app_src/login"
     "github.com/spacetimi/timi_shared_server/code/core/adaptors/redis_adaptor"
     "github.com/spacetimi/timi_shared_server/code/core/controller"
     "github.com/spacetimi/timi_shared_server/code/core/services/identity_service"
@@ -21,25 +22,19 @@ func (alh *AppLoginHandler) handleResetPassword(httpResponseWriter http.Response
 
     redisKey, ok := args.RequestPathVars["rediskey"]
     if !ok || len(redisKey) == 0 {
-        showErrorMessage("Invalid password-reset link", httpResponseWriter)
+        showMessage("Invalid password-reset link", "", httpResponseWriter)
         return
     }
 
-    redisValue, ok := redis_adaptor.Read(redisKey)
-    if !ok || len(redisValue) == 0 {
-        showErrorMessage("Invalid password-reset link", httpResponseWriter)
-        return
-    }
-
-    userId, err := strconv.ParseInt(redisValue, 10, 64)
+    userId, err := login.GetUserIdFromResetAccountPasswordRedisKey(redisKey)
     if err != nil {
-        showErrorMessage("Invalid password-reset link", httpResponseWriter)
+        showMessage("Invalid password-reset link", "", httpResponseWriter)
         return
     }
 
     user, err := identity_service.GetUserBlobById(userId, request.Context())
     if err != nil {
-        showErrorMessage("Unable to fetch user account", httpResponseWriter)
+        showMessage("Unable to fetch user account", "", httpResponseWriter)
         return
     }
 
@@ -120,12 +115,4 @@ func parsePostArgsForResetPassword(postArgs map[string]string) (string, error) {
     return password, nil
 }
 
-func showErrorMessage(message string, httpResponseWriter http.ResponseWriter) {
-    messageHeader := message
-    messageBody := ""
-    backlinkName := "<< Login"
-    app_simple_message_page.ShowAppSimpleMessagePage(httpResponseWriter,
-                                                     messageHeader, messageBody,
-                                                     app_routes.Login,
-                                                     backlinkName)
-}
+

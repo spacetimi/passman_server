@@ -2,6 +2,7 @@ package app_login
 
 import (
     "github.com/spacetimi/passman_server/app_src/app_routes"
+    "github.com/spacetimi/passman_server/app_src/app_utils/app_simple_message_page"
     "github.com/spacetimi/timi_shared_server/code/config"
     "github.com/spacetimi/timi_shared_server/code/core/controller"
     "github.com/spacetimi/timi_shared_server/utils/logger"
@@ -29,6 +30,7 @@ func (alh *AppLoginHandler) Routes() []controller.Route {
     return []controller.Route {
         controller.NewRoute(app_routes.Login, []controller.RequestMethodType{controller.GET, controller.POST}),
         controller.NewRoute(app_routes.CreateUser, []controller.RequestMethodType{controller.GET, controller.POST}),
+        controller.NewRoute(app_routes.ActivateAccount, []controller.RequestMethodType{controller.GET, controller.POST}),
         controller.NewRoute(app_routes.ForgotUsernameOrPassword, []controller.RequestMethodType{controller.GET, controller.POST}),
         controller.NewRoute(app_routes.ResetPassword, []controller.RequestMethodType{controller.GET, controller.POST}),
         controller.NewRoute(app_routes.Logout, []controller.RequestMethodType{controller.GET, controller.POST}),
@@ -62,8 +64,21 @@ func (alh *AppLoginHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, 
         alh.handleResetPassword(httpResponseWriter, request, args)
         return
     }
+    if app_routes.ActivateAccountBase == filepath.Dir(request.URL.Path) + "/" {
+        alh.handleActivateAccount(httpResponseWriter, request, args)
+        return
+    }
 
     logger.LogError("unknown route request|request url=" + request.URL.Path)
     httpResponseWriter.WriteHeader(http.StatusNotFound)
 }
 
+func showMessage(header string, body string, httpResponseWriter http.ResponseWriter) {
+    messageHeader := header
+    messageBody := body
+    backlinkName := "<< Login"
+    app_simple_message_page.ShowAppSimpleMessagePage(httpResponseWriter,
+                                                     messageHeader, messageBody,
+                                                     app_routes.Login,
+                                                     backlinkName)
+}

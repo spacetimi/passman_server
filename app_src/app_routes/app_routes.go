@@ -8,6 +8,9 @@ const CreateUser = "/createUser"
 const ForgotUsernameOrPassword = "/forgotUsernameOrPassword"
 const Logout = "/logout"
 
+const ActivateAccountBase = "/activateAccount/"
+const ActivateAccount = ActivateAccountBase + "{rediskey}"
+
 const ResetPasswordBase = "/resetPassword/"
 const ResetPassword = ResetPasswordBase + "{rediskey}"
 

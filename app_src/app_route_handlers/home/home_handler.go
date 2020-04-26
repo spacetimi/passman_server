@@ -2,6 +2,7 @@ package home
 
 import (
     "github.com/spacetimi/passman_server/app_src/app_routes"
+    "github.com/spacetimi/passman_server/app_src/app_utils/app_simple_message_page"
     "github.com/spacetimi/passman_server/app_src/login"
     "github.com/spacetimi/timi_shared_server/code/config"
     "github.com/spacetimi/timi_shared_server/code/core/controller"
@@ -41,6 +42,15 @@ func (hh *HomeHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, reque
     user, ok := login.TryGetLoggedInUser(request)
     if !ok {
         http.Redirect(httpResponseWriter, request, app_routes.Login, http.StatusSeeOther)
+        return
+    }
+
+    // If user has not verified their email address, redirect to error page
+    if !user.UserEmailAddressVerified {
+        app_simple_message_page.ShowAppSimpleMessagePage(httpResponseWriter,
+                                           "Email Address not verified",
+                                             "Please check your email for account activation link (Make sure to check spam, too)",
+                                                          app_routes.Login, "<< Login")
         return
     }
 

@@ -7,11 +7,13 @@ import (
     "github.com/spacetimi/passman_server/app_src/app_utils/app_emailer"
     "github.com/spacetimi/passman_server/app_src/app_utils/app_simple_message_page"
     "github.com/spacetimi/passman_server/app_src/login"
+    "github.com/spacetimi/timi_shared_server/code/config"
     "github.com/spacetimi/timi_shared_server/code/core/controller"
     "github.com/spacetimi/timi_shared_server/code/core/services/identity_service"
     "github.com/spacetimi/timi_shared_server/utils/email_utils"
     "github.com/spacetimi/timi_shared_server/utils/logger"
     "net/http"
+    "strconv"
 )
 
 func (alh *AppLoginHandler) handleForgotUsernameOrPassword(httpResponseWriter http.ResponseWriter,
@@ -62,14 +64,18 @@ func trySendPasswordResetEmail(postArgs map[string]string, ctx context.Context) 
         return errors.New("* Couldn't find any registered user for " + userEmailAddress)
     }
 
-    resetPasswordLink, err := login.GenerateResetAccountPasswordLink(user)
+    resetPasswordRedisKey, err := login.GenerateResetAccountPasswordRedisObject(user)
     if err != nil {
         return errors.New("* Something went wrong. Please try again")
     }
+    resetPasswordLink := config.GetEnvironmentConfiguration().ApiServerBaseURL + ":" +
+                        strconv.Itoa(config.GetEnvironmentConfiguration().Port) +
+                        app_routes.ResetPasswordBase + resetPasswordRedisKey
 
     email := email_utils.Email{
                 Subject: "Password reset instructions for your PassMan account",
-                Body: "Click here to reset your password: " + resetPasswordLink + "\n" +
+                Body: "Your UserName: " + user.UserName + "\n" +
+                      "Click here to reset your password: " + resetPasswordLink + "\n" +
                       // TODO: Don't hard-code 2 days here
                       "This link will be active for 2 days.",
              }

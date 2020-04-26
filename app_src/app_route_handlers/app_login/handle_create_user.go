@@ -4,12 +4,17 @@ import (
     "context"
     "errors"
     "github.com/spacetimi/passman_server/app_src/app_routes"
+    "github.com/spacetimi/passman_server/app_src/app_utils/app_emailer"
     "github.com/spacetimi/passman_server/app_src/app_utils/app_simple_message_page"
+    "github.com/spacetimi/passman_server/app_src/login"
+    "github.com/spacetimi/timi_shared_server/code/config"
     "github.com/spacetimi/timi_shared_server/code/core/controller"
     "github.com/spacetimi/timi_shared_server/code/core/services/identity_service"
+    "github.com/spacetimi/timi_shared_server/utils/email_utils"
     "github.com/spacetimi/timi_shared_server/utils/logger"
     "net/http"
     "regexp"
+    "strconv"
 )
 
 func (alh *AppLoginHandler) handleCreateUser(httpResponseWriter http.ResponseWriter,
@@ -26,7 +31,7 @@ func (alh *AppLoginHandler) handleCreateUser(httpResponseWriter http.ResponseWri
 
             // Show success message and return
             messageHeader := "Successfully created Account"
-            messageBody := "Login to continue"
+            messageBody := "Please check your email for the account activation link"
             backlinkName := "<< Login"
             app_simple_message_page.ShowAppSimpleMessagePage(httpResponseWriter,
                                                              messageHeader, messageBody,
@@ -54,14 +59,42 @@ func tryCreateNewUser(postArgs map[string]string, ctx context.Context) error {
         return err
     }
 
-    _, err = identity_service.CreateNewUser(parsed.Username, parsed.Password, parsed.EmailAddress, ctx)
+    user, err := identity_service.CreateNewUser(parsed.Username, parsed.Password, parsed.EmailAddress, ctx)
     if err != nil {
         return errors.New("* Error creating new user: " + err.Error())
     }
 
+    sendNewAccountActivationEmail(user)
+
     return nil
 }
 
+func sendNewAccountActivationEmail(user *identity_service.UserBlob) {
+    newAccountActivationRedisKey, err := login.GenerateNewAccountActivationRedisObject(user)
+    if err != nil {
+        logger.LogError("error generating redis object for new account activation" +
+                        "|user id=" + strconv.FormatInt(user.UserId, 10) +
+                        "|error=" + err.Error())
+        return
+    }
+    newAccountActivationLink := config.GetEnvironmentConfiguration().ApiServerBaseURL + ":" +
+                                strconv.Itoa(config.GetEnvironmentConfiguration().Port) +
+                                app_routes.ActivateAccountBase + newAccountActivationRedisKey
+
+    email := email_utils.Email{
+        Subject: "Welcome to PassMan, " + user.UserName + "!",
+        Body: "Please click here to activate your account: " + newAccountActivationLink + "\n" +
+              // TODO: Do not hard-code 2 days here
+              "This link is valid for 2 days",
+    }
+
+    err = app_emailer.SendEmail(user.UserEmailAddress, email)
+    if err != nil {
+        logger.LogError("error sending account activation email" +
+                        "|user id=" + strconv.FormatInt(user.UserId, 10) +
+                        "|error=" + err.Error())
+    }
+}
 
 const kPostArgNewUsername = "new_username"
 const kPostArgNewUserEmail = "new_useremail"
