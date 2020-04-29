@@ -33,6 +33,9 @@ func (hh *HomeHandler) handleViewPassword(user *identity_service.UserBlob, httpR
 
     userWebsites, err := user_websites.LoadByUserId(user.UserId, request.Context(), true)
     if err != nil {
+        logger.LogError("error finding user websites blob" +
+                        "|user id=" + strconv.FormatInt(user.UserId, 10) +
+                        "|error=" + err.Error())
         // Show error message and return
         messageHeader := "Something went wrong"
         messageBody := "Please try again"
@@ -43,10 +46,10 @@ func (hh *HomeHandler) handleViewPassword(user *identity_service.UserBlob, httpR
 
     userWebsite := userWebsites.GetUserWebsite(parsedArgs.WebsiteName)
     if userWebsite == nil {
-        // Show error message and return
         logger.LogError("error finding user website object" +
                         "|user id=" + strconv.FormatInt(user.UserId, 10) +
                         "|website name=" + parsedArgs.WebsiteName)
+        // Show error message and return
         messageHeader := "Something went wrong"
         messageBody := "Please try again"
         backlinkName := "<< Home"

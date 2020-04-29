@@ -19,3 +19,4 @@ const GenerateNewPassword = "/generateNewPassword"
 const ViewPassword = "/viewPassword"
 
 const AddNewSecret = "/addNewSecret"
+const ViewSecret = "/viewSecret"

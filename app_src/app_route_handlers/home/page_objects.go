@@ -33,6 +33,13 @@ type ViewPasswordPageObject struct {
     Password string
 }
 
+type ViewSecretPageObject struct {
+    PageObjectBase
+
+    SecretName string
+    SecretValue string
+}
+
 func (po *PageObjectBase) SetError(errorString string) {
     po.HasError = true
     po.ErrorString = errorString
