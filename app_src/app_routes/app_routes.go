@@ -3,6 +3,8 @@ package app_routes
 const Home = ""
 const HomeSlash = "/"
 
+const Faq = "/faq"
+
 const Login = "/login"
 const CreateUser = "/createUser"
 const ForgotUsernameOrPassword = "/forgotUsernameOrPassword"
