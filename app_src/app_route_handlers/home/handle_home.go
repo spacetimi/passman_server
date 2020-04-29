@@ -8,6 +8,7 @@ import (
     "github.com/spacetimi/timi_shared_server/utils/logger"
     "net/http"
     "strconv"
+    "strings"
 )
 
 func (hh *HomeHandler) handleHome(user *identity_service.UserBlob, httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
@@ -50,6 +51,7 @@ func (hh *HomeHandler) handleHome(user *identity_service.UserBlob, httpResponseW
     for _, userSecret := range userSecretsBlob.UserSecrets {
         userSecretCard := UserSecretCardObject{
             SecretName:userSecret.SecretName,
+            SecretNameEscaped:strings.Replace(userSecret.SecretName, " ", "_", -1),
         }
 
         pageObject.UserSecretCards = append(pageObject.UserSecretCards, userSecretCard)

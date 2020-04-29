@@ -21,6 +21,7 @@ type UserWebsiteCardObject struct {
 }
 
 type UserSecretCardObject struct {
+    SecretNameEscaped string
     SecretName string
 }
 
