@@ -39,9 +39,12 @@ func (hh *HomeHandler) handleAddOrModifyUserWebsiteCredentials(user *identity_se
 
     err = userWebsites.AddOrModifyUserWebsiteCredentials(parsedArgs.WebsiteName, parsedArgs.UserAlias, request.Context())
     if err != nil {
+        logger.LogError("error add/modify user-website-credentials" +
+                        "|user id=" + strconv.FormatInt(user.UserId, 10) +
+                        "|error=" + err.Error())
         // Show error message and return
         messageHeader := "Something went wrong"
-        messageBody := err.Error()
+        messageBody := "Please try again"
         backlinkName := "<< Home"
         app_simple_message_page.ShowAppSimpleMessagePage(httpResponseWriter, messageHeader, messageBody, app_routes.HomeSlash, backlinkName)
         return

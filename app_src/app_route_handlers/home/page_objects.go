@@ -12,11 +12,16 @@ type HomePageObject struct {
     PageObjectBase
 
     UserWebsiteCards []UserWebsiteCardObject
+    UserSecretCards []UserSecretCardObject
 }
 
 type UserWebsiteCardObject struct {
     WebsiteName string
     UserAliases []string
+}
+
+type UserSecretCardObject struct {
+    SecretName string
 }
 
 type ViewPasswordPageObject struct {

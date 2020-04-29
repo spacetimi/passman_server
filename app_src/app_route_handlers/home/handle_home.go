@@ -1,6 +1,7 @@
 package home
 
 import (
+    "github.com/spacetimi/passman_server/app_src/data/user_secrets"
     "github.com/spacetimi/passman_server/app_src/data/user_websites"
     "github.com/spacetimi/timi_shared_server/code/core/controller"
     "github.com/spacetimi/timi_shared_server/code/core/services/identity_service"
@@ -13,7 +14,17 @@ func (hh *HomeHandler) handleHome(user *identity_service.UserBlob, httpResponseW
 
     userWebsitesBlob, err := user_websites.LoadByUserId(user.UserId, request.Context(), true)
     if err != nil {
-        logger.LogError("error getting user websites object" +
+        logger.LogError("error getting user websites blob" +
+                        "|request url=" + request.URL.Path +
+                        "|user id=" + strconv.FormatInt(user.UserId, 10) +
+                        "|error=" + err.Error())
+        httpResponseWriter.WriteHeader(http.StatusInternalServerError)
+        return
+    }
+
+    userSecretsBlob, err := user_secrets.LoadByUserId(user.UserId, request.Context(), true)
+    if err != nil {
+        logger.LogError("error getting user secrets blob" +
                         "|request url=" + request.URL.Path +
                         "|user id=" + strconv.FormatInt(user.UserId, 10) +
                         "|error=" + err.Error())
@@ -34,6 +45,14 @@ func (hh *HomeHandler) handleHome(user *identity_service.UserBlob, httpResponseW
         }
 
         pageObject.UserWebsiteCards = append(pageObject.UserWebsiteCards, userWebsiteCard)
+    }
+
+    for _, userSecret := range userSecretsBlob.UserSecrets {
+        userSecretCard := UserSecretCardObject{
+            SecretName:userSecret.SecretName,
+        }
+
+        pageObject.UserSecretCards = append(pageObject.UserSecretCards, userSecretCard)
     }
 
     err = hh.Render(httpResponseWriter,

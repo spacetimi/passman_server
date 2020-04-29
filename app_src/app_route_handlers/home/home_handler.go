@@ -33,6 +33,7 @@ func (hh *HomeHandler) Routes() []controller.Route {
         controller.NewRoute(app_routes.AddNewWebsite, []controller.RequestMethodType{controller.POST}),
         controller.NewRoute(app_routes.GenerateNewPassword, []controller.RequestMethodType{controller.POST}),
         controller.NewRoute(app_routes.ViewPassword, []controller.RequestMethodType{controller.POST}),
+        controller.NewRoute(app_routes.AddNewSecret, []controller.RequestMethodType{controller.POST}),
     }
 }
 
@@ -67,6 +68,9 @@ func (hh *HomeHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, reque
 
     case app_routes.ViewPassword:
         hh.handleViewPassword(user, httpResponseWriter, request, args)
+
+    case app_routes.AddNewSecret:
+        hh.handleAddNewSecret(user, httpResponseWriter, request, args)
 
     default:
         logger.LogError("unknown route request|request url=" + request.URL.Path)
