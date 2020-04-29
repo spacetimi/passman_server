@@ -7,6 +7,7 @@ import (
     "github.com/spacetimi/timi_shared_server/code/core/services/identity_service"
     "github.com/spacetimi/timi_shared_server/utils/logger"
     "net/http"
+    "sort"
     "strconv"
     "strings"
 )
@@ -47,6 +48,9 @@ func (hh *HomeHandler) handleHome(user *identity_service.UserBlob, httpResponseW
 
         pageObject.UserWebsiteCards = append(pageObject.UserWebsiteCards, userWebsiteCard)
     }
+    sort.Slice(pageObject.UserWebsiteCards, func(i, j int) bool {
+        return pageObject.UserWebsiteCards[i].WebsiteName < pageObject.UserWebsiteCards[j].WebsiteName
+    })
 
     for _, userSecret := range userSecretsBlob.UserSecrets {
         userSecretCard := UserSecretCardObject{
@@ -56,6 +60,10 @@ func (hh *HomeHandler) handleHome(user *identity_service.UserBlob, httpResponseW
 
         pageObject.UserSecretCards = append(pageObject.UserSecretCards, userSecretCard)
     }
+    sort.Slice(pageObject.UserSecretCards, func(i, j int) bool {
+        return pageObject.UserSecretCards[i].SecretName < pageObject.UserSecretCards[j].SecretName
+    })
+
 
     err = hh.Render(httpResponseWriter,
        "home_page_template.html",
