@@ -2,12 +2,12 @@ package faq
 
 import "github.com/spacetimi/timi_shared_server/code/core/services/metadata_service/metadata_typedefs"
 
-const MetadataName = "Metadata"
+const MetadataKey = "FaqMetadata"
 
 type MetadataFactory struct {   // Implements IMetadataFactory
 }
 
-type Metadata struct {// Implements IMetadataItem
+type Metadata struct {          // Implements IMetadataItem
     FaqItems []Item
 }
 
@@ -21,7 +21,7 @@ func (fmf MetadataFactory) Instantiate() metadata_typedefs.IMetadataItem {
 }
 
 func (fm Metadata) GetKey() string {
-    return MetadataName
+    return MetadataKey
 }
 
 func (fm Metadata) GetMetadataSpace() metadata_typedefs.MetadataSpace {

@@ -27,6 +27,6 @@ func (appInitializer *AppInitializer) AppInit() error {
 /********** End IAppInitializer implementation **********/
 
 func registerMetadataFactories() {
-	metadata_factory.RegisterFactory(faq.MetadataName, faq.MetadataFactory{})
+	metadata_factory.RegisterFactory(faq.MetadataKey, faq.MetadataFactory{})
 }
 
