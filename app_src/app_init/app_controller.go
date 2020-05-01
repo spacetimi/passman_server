@@ -1,6 +1,7 @@
 package app_init
 
 import (
+    "github.com/spacetimi/passman_server/app_src/app_route_handlers/about"
     "github.com/spacetimi/passman_server/app_src/app_route_handlers/app_login"
     "github.com/spacetimi/passman_server/app_src/app_route_handlers/faq"
     "github.com/spacetimi/passman_server/app_src/app_route_handlers/home"
@@ -15,6 +16,7 @@ func (ac *AppController) RouteHandlers() []controller.IRouteHandler {
         app_login.NewAppLoginHandler(),
         home.NewHomeHandler(),
         faq.NewFaqHandler(),
+        about.NewAboutHandler(),
     }
 }
 

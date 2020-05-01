@@ -4,6 +4,7 @@ const Home = ""
 const HomeSlash = "/"
 
 const Faq = "/faq"
+const About = "/about"
 
 const Login = "/login"
 const CreateUser = "/createUser"
