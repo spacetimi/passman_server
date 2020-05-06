@@ -1,24 +1,24 @@
 {
     "AppEnvironment": 3,
     "Port": 9000,
-    "ApiServerBaseURL": "TBD",
+    "ApiServerBaseURL": "passman.spacetimi.com",
 
-    "SharedMongoURL": "TBD",
-    "AppMongoURL": "TBD",
+    "SharedMongoURL": "mongodb+srv://root:netapp1!@passman-envtest-yb8td.mongodb.net/test?retryWrites=true&w=majority",
+    "AppMongoURL": "mongodb+srv://root:netapp1!@passman-prod-g0i9t.mongodb.net/test?retryWrites=true&w=majority",
     "SharedDatabaseName": "shared",
     "AppDatabaseName": "passman",
 
-    "SharedRedisURL": "TBD",
-    "SharedRedisPasswd": "",
-    "AppRedisURL": "TBD",
-    "AppRedisPasswd": "",
+    "SharedRedisURL": "redis-18451.c17.us-east-1-4.ec2.cloud.redislabs.com:18451",
+    "SharedRedisPasswd": "netapp1!",
+    "AppRedisURL": "redis-10449.c81.us-east-1-2.ec2.cloud.redislabs.com:10449",
+    "AppRedisPasswd": "netapp1!",
 
-    "SharedMetadataSourceURL": "",
-    "AppMetadataSourceURL": "",
+    "SharedMetadataSourceURL": "https://spacetimi-shared-env-production.s3.amazonaws.com/metadata",
+    "AppMetadataSourceURL": "https://passman-production.s3.amazonaws.com/metadata",
     "MetadataAutoUpdaterPollSeconds": 600,
 
     "AdminToolConfig": {
-        "SharedMetadataS3BucketName": "spacetimi-shared-production",
-        "AppMetadataS3BucketName": "spacetimi-passman-production"
+        "SharedMetadataS3BucketName": "spacetimi-shared-env-production",
+        "AppMetadataS3BucketName": "passman-production"
     }
 }
