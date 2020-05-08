@@ -68,9 +68,12 @@ func trySendPasswordResetEmail(postArgs map[string]string, ctx context.Context) 
     if err != nil {
         return errors.New("* Something went wrong. Please try again")
     }
-    resetPasswordLink := config.GetEnvironmentConfiguration().ApiServerBaseURL + ":" +
-                        strconv.Itoa(config.GetEnvironmentConfiguration().Port) +
-                        app_routes.ResetPasswordBase + resetPasswordRedisKey
+    resetPasswordLink := config.GetEnvironmentConfiguration().ApiServerBaseURL
+    if config.GetEnvironmentConfiguration().Port != 80 {
+        resetPasswordLink = resetPasswordLink + ":" +
+                            strconv.Itoa(config.GetEnvironmentConfiguration().Port)
+    }
+    resetPasswordLink = resetPasswordLink + app_routes.ResetPasswordBase + resetPasswordRedisKey
 
     email := email_utils.Email{
                 Subject: "Password reset instructions for your PassMan account",

@@ -77,9 +77,12 @@ func sendNewAccountActivationEmail(user *identity_service.UserBlob) {
                         "|error=" + err.Error())
         return
     }
-    newAccountActivationLink := config.GetEnvironmentConfiguration().ApiServerBaseURL + ":" +
-                                strconv.Itoa(config.GetEnvironmentConfiguration().Port) +
-                                app_routes.ActivateAccountBase + newAccountActivationRedisKey
+    newAccountActivationLink := config.GetEnvironmentConfiguration().ApiServerBaseURL
+    if config.GetEnvironmentConfiguration().Port != 80 {
+        newAccountActivationLink = newAccountActivationLink + ":" +
+                                   strconv.Itoa(config.GetEnvironmentConfiguration().Port)
+    }
+    newAccountActivationLink = newAccountActivationLink + app_routes.ActivateAccountBase + newAccountActivationRedisKey
 
     email := email_utils.Email{
         Subject: "Welcome to PassMan, " + user.UserName + "!",
