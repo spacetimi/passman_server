@@ -1,7 +1,7 @@
 {
     "AppEnvironment": 3,
     "Port": 80,
-    "ApiServerBaseURL": "passman.spacetimi.com",
+    "ApiServerBaseURL": "https://passman.spacetimi.com",
 
     "SharedMongoURL": "mongodb+srv://root:netapp1!@passman-envtest-yb8td.mongodb.net/test?retryWrites=true&w=majority",
     "AppMongoURL": "mongodb+srv://root:netapp1!@passman-prod-g0i9t.mongodb.net/test?retryWrites=true&w=majority",
