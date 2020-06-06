@@ -1,6 +1,7 @@
 package login
 
 import (
+    "context"
     "errors"
     "github.com/spacetimi/timi_shared_server/code/config"
     "github.com/spacetimi/timi_shared_server/code/core/adaptors/redis_adaptor"
@@ -13,13 +14,13 @@ import (
     "time"
 )
 
-func GenerateNewAccountActivationRedisObject(user *identity_service.UserBlob) (string, error) {
+func GenerateNewAccountActivationRedisObject(user *identity_service.UserBlob, ctx context.Context) (string, error) {
 
     rand.Seed(time.Now().Unix())
     randomString := strconv.FormatInt(user.UserId, 10) + ":" + strconv.Itoa(rand.Intn(math.MaxInt32))
     redisKey := config.GetAppName() + ":" + "newacct" + ":" + encryption_utils.Generate_md5_hash(randomString)
 
-    err := redis_adaptor.Write(redisKey, strconv.FormatInt(user.UserId, 10), 48 * time.Hour)
+    err := redis_adaptor.Write(redisKey, strconv.FormatInt(user.UserId, 10), 48 * time.Hour, ctx)
     if err != nil {
         logger.LogError("error writing new account activation information to redis" +
                         "|user id=" + strconv.FormatInt(user.UserId, 10) +
@@ -30,9 +31,9 @@ func GenerateNewAccountActivationRedisObject(user *identity_service.UserBlob) (s
     return redisKey, nil
 }
 
-func GetUserIdFromNewAccountActivationRedisKey(redisKey string) (int64, error) {
+func GetUserIdFromNewAccountActivationRedisKey(redisKey string, ctx context.Context) (int64, error) {
 
-    redisValue, ok := redis_adaptor.Read(redisKey)
+    redisValue, ok := redis_adaptor.Read(redisKey, ctx)
     if !ok || len(redisValue) == 0 {
         return -1, errors.New("error finding redis value for key")
     }

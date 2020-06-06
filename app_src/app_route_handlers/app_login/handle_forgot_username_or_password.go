@@ -64,7 +64,7 @@ func trySendPasswordResetEmail(postArgs map[string]string, ctx context.Context) 
         return errors.New("* Couldn't find any registered user for " + userEmailAddress)
     }
 
-    resetPasswordRedisKey, err := login.GenerateResetAccountPasswordRedisObject(user)
+    resetPasswordRedisKey, err := login.GenerateResetAccountPasswordRedisObject(user, ctx)
     if err != nil {
         return errors.New("* Something went wrong. Please try again")
     }

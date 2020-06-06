@@ -26,7 +26,7 @@ func (alh *AppLoginHandler) handleResetPassword(httpResponseWriter http.Response
         return
     }
 
-    userId, err := login.GetUserIdFromResetAccountPasswordRedisKey(redisKey)
+    userId, err := login.GetUserIdFromResetAccountPasswordRedisKey(redisKey, request.Context())
     if err != nil {
         showMessage("Invalid password-reset link", "", httpResponseWriter)
         return
@@ -45,7 +45,7 @@ func (alh *AppLoginHandler) handleResetPassword(httpResponseWriter http.Response
             pageObject.SetError(err.Error())
         } else {
 
-            err = redis_adaptor.Delete(redisKey)
+            err = redis_adaptor.Delete(redisKey, request.Context())
             if err != nil {
                 logger.LogWarning("error removing password reset link key from redis" +
                                   "|user id=" + strconv.FormatInt(user.UserId, 10) +

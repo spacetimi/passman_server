@@ -20,7 +20,7 @@ func (alh *AppLoginHandler) handleActivateAccount(httpResponseWriter http.Respon
         return
     }
 
-    userId, err := login.GetUserIdFromNewAccountActivationRedisKey(redisKey)
+    userId, err := login.GetUserIdFromNewAccountActivationRedisKey(redisKey, request.Context())
     if err != nil {
         showMessage("Invalid account-activation link", "", httpResponseWriter)
         return
@@ -32,7 +32,7 @@ func (alh *AppLoginHandler) handleActivateAccount(httpResponseWriter http.Respon
         return
     }
 
-    err = redis_adaptor.Delete(redisKey)
+    err = redis_adaptor.Delete(redisKey, request.Context())
     if err != nil {
         logger.LogWarning("error removing password reset link key from redis" +
                           "|user id=" + strconv.FormatInt(userId, 10) +

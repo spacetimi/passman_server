@@ -64,13 +64,13 @@ func tryCreateNewUser(postArgs map[string]string, ctx context.Context) error {
         return errors.New("* Error creating new user: " + err.Error())
     }
 
-    sendNewAccountActivationEmail(user)
+    sendNewAccountActivationEmail(user, ctx)
 
     return nil
 }
 
-func sendNewAccountActivationEmail(user *identity_service.UserBlob) {
-    newAccountActivationRedisKey, err := login.GenerateNewAccountActivationRedisObject(user)
+func sendNewAccountActivationEmail(user *identity_service.UserBlob, ctx context.Context) {
+    newAccountActivationRedisKey, err := login.GenerateNewAccountActivationRedisObject(user, ctx)
     if err != nil {
         logger.LogError("error generating redis object for new account activation" +
                         "|user id=" + strconv.FormatInt(user.UserId, 10) +
