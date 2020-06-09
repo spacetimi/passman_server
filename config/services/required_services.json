@@ -1,0 +1,8 @@
+{
+    "Services": [
+        "mongo_adaptor",
+        "redis_adaptor",
+        "metadata_service",
+        "identity_service"
+    ]
+}

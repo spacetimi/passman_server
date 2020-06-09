@@ -5,6 +5,8 @@ ADD . /go/src/github.com/spacetimi/passman_server
 
 # Override any localhost URLs to host.docker.internal so we can use services running on host machine
 RUN sed -i -e 's/localhost/host.docker.internal/g' /go/src/github.com/spacetimi/passman_server/config/environment_config.local.json
+RUN sed -i -e 's/localhost/host.docker.internal/g' /go/src/github.com/spacetimi/passman_server/config/services/mongo_adaptor/local.json
+RUN sed -i -e 's/localhost/host.docker.internal/g' /go/src/github.com/spacetimi/passman_server/config/services/redis_adaptor/local.json
 
 # Fetch shared source
 RUN git clone https://github.com/spacetimi/timi_shared_server /go/src/github.com/spacetimi/timi_shared_server

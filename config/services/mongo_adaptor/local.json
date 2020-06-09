@@ -1,0 +1,6 @@
+{
+    "SharedMongoURL": "mongodb://localhost:27017",
+    "AppMongoURL": "mongodb://localhost:27017",
+    "SharedDBName": "shared",
+    "AppDBName": "passman"
+}

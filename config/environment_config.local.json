@@ -3,16 +3,6 @@
     "Port": 9000,
     "ApiServerBaseURL": "127.0.0.1",
 
-    "SharedMongoURL": "mongodb://localhost:27017",
-    "AppMongoURL": "mongodb://localhost:27017",
-    "SharedDatabaseName": "shared",
-    "AppDatabaseName": "passman",
-
-    "SharedRedisURL": "localhost:6379",
-    "SharedRedisPasswd": "",
-    "AppRedisURL": "localhost:6379",
-    "AppRedisPasswd": "",
-
     "SharedMetadataSourceURL": "local",
     "AppMetadataSourceURL": "local",
     "MetadataAutoUpdaterPollSeconds": 10,

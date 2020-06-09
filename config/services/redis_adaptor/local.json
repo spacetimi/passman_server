@@ -1,0 +1,4 @@
+{
+    "RedisURL": "localhost:6379",
+    "RedisPasswd": ""
+}

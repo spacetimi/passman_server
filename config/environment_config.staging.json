@@ -3,16 +3,6 @@
     "Port": 9000,
     "ApiServerBaseURL": "TBD",
 
-    "SharedMongoURL": "TBD",
-    "AppMongoURL": "TBD",
-    "SharedDatabaseName": "shared",
-    "AppDatabaseName": "passman",
-
-    "SharedRedisURL": "TBD",
-    "SharedRedisPasswd": "",
-    "AppRedisURL": "TBD",
-    "AppRedisPasswd": "",
-
     "SharedMetadataSourceURL": "",
     "AppMetadataSourceURL": "",
     "MetadataAutoUpdaterPollSeconds": 300,
