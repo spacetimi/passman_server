@@ -1,4 +1,4 @@
-FROM spacetimi/spacetimi-docker-parent
+FROM golang:1.14
 
 # NOTE: Build context is expected to be one level higher than your app's code folder. Please call docker build from there
 
@@ -14,7 +14,7 @@ RUN sed -i -e 's/localhost/host.docker.internal/g' /go/src/github.com/spacetimi/
 RUN sed -i -e 's/localhost/host.docker.internal/g' /go/src/github.com/spacetimi/passman_server/config/services/redis_adaptor/local.json
 
 # Build and install the server binary
-RUN go install github.com/spacetimi/passman_server/main
+RUN cd /go/src/github.com/spacetimi/passman_server && go install /go/src/github.com/spacetimi/passman_server/main/main.go
 
 ENTRYPOINT /go/bin/main
 EXPOSE 9000

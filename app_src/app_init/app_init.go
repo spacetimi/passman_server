@@ -11,11 +11,16 @@ func GetAppInitializer() shared_init.IAppInitializer {
 	return &appInitializer
 }
 
-type AppInitializer struct {	// Implements IAppInit
+type AppInitializer struct { // Implements IAppInit
 }
+
 var appInitializer AppInitializer
 
 /********** Begin IAppInitializer implementation **********/
+func (appInitializer *AppInitializer) AppName() string {
+	return "passman_server"
+}
+
 func (appInitializer *AppInitializer) AppInit() error {
 
 	registerMetadataFactories()
@@ -24,9 +29,9 @@ func (appInitializer *AppInitializer) AppInit() error {
 
 	return nil
 }
+
 /********** End IAppInitializer implementation **********/
 
 func registerMetadataFactories() {
 	metadata_factory.RegisterFactory(faq.MetadataKey, faq.MetadataFactory{})
 }
-
