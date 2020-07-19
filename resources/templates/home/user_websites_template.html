@@ -87,6 +87,11 @@
         }
 
         masterPassword = window.sessionStorage.getItem('pamp');
+        if (masterPassword == null) {
+            window.location.replace("/login");
+            return;
+        }
+
         password = generatePassword(12);
         passwordEncrypted = encrypt(password, masterPassword);
 

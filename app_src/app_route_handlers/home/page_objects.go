@@ -42,8 +42,8 @@ type ViewPasswordPageObject struct {
 type ViewSecretPageObject struct {
 	PageObjectBase
 
-	SecretName  string
-	SecretValue string
+	SecretName      string
+	SecretEncrypted string
 }
 
 func (po *PageObjectBase) SetError(errorString string) {

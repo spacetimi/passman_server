@@ -7,7 +7,6 @@ import (
 
 	"github.com/spacetimi/timi_shared_server/code/core/services/storage_service"
 	"github.com/spacetimi/timi_shared_server/code/core/services/storage_service/storage_typedefs"
-	"github.com/spacetimi/timi_shared_server/utils/encryption_utils"
 	"github.com/spacetimi/timi_shared_server/utils/logger"
 )
 
@@ -56,35 +55,26 @@ func Create(userId int64, ctx context.Context) (*UserSecretsBlob, error) {
 	return userSecrets, nil
 }
 
-func (blob *UserSecretsBlob) GetSecret(secretName string, masterPassword string) (string, error) {
+func (blob *UserSecretsBlob) GetSecret(secretName string) (string, error) {
 	userSecret, err := blob.getUserSecretByName(secretName)
 	if err != nil {
 		return "", err
 	}
 
-	decryptedSecret, err := decryptSecret(userSecret.SecretDataEncrypted, blob.getEncryptionKey(secretName, masterPassword))
-	if err != nil {
-		return "", errors.New("error decrypting secret: " + err.Error())
-	}
-
-	return decryptedSecret, nil
+	return userSecret.SecretDataEncrypted, nil
 }
 
-func (blob *UserSecretsBlob) AddOrModifySecret(secretName string, secretData string, masterPassword string, ctx context.Context) error {
-	encryptedSecret, err := encryptSecret(secretData, blob.getEncryptionKey(secretName, masterPassword))
-	if err != nil {
-		return errors.New("error encrypting secret: " + err.Error())
-	}
+func (blob *UserSecretsBlob) AddOrModifySecret(secretName string, secretDataEncrypted string, ctx context.Context) error {
 
 	userSecret, err := blob.getUserSecretByName(secretName)
 	if err != nil || userSecret == nil {
 		userSecret = &UserSecret{
 			SecretName:          secretName,
-			SecretDataEncrypted: encryptedSecret,
+			SecretDataEncrypted: secretDataEncrypted,
 		}
 		blob.UserSecrets = append(blob.UserSecrets, userSecret)
 	} else {
-		userSecret.SecretDataEncrypted = encryptedSecret
+		userSecret.SecretDataEncrypted = secretDataEncrypted
 	}
 
 	// TODO: Avi: Move this somewhere else (like a set-dirty thing for transactions)
@@ -150,26 +140,4 @@ func (blob *UserSecretsBlob) getUserSecretByName(secretName string) (*UserSecret
 	}
 
 	return nil, errors.New("no such secret")
-}
-
-func (blob *UserSecretsBlob) getEncryptionKey(secretName string, masterPassword string) string {
-	return secretName + ":" + strconv.FormatInt(blob.UserId, 10) + ":" + masterPassword
-}
-
-func encryptSecret(secret string, key string) (string, error) {
-	encrypted, err := encryption_utils.EncryptUsingAES(secret, key)
-	if err != nil {
-		return "", err
-	}
-
-	return encrypted, nil
-}
-
-func decryptSecret(encryptedSecret string, key string) (string, error) {
-	decrypted, err := encryption_utils.DecryptUsingAES(encryptedSecret, key)
-	if err != nil {
-		return "", err
-	}
-
-	return decrypted, nil
 }

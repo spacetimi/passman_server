@@ -94,6 +94,11 @@
         }
 
         function onBodyLoaded() {
+            checkAndDecryptViewPassword();
+            checkAndDecryptViewSecret();
+        }
+
+        function checkAndDecryptViewPassword() {
             var passwordElement = document.getElementById("view-password");
             if (passwordElement == null) {
                 return;
@@ -107,6 +112,22 @@
 
             var password = decrypt(passwordElement.innerHTML, masterPassword);
             passwordElement.innerHTML = password;
+        }
+
+        function checkAndDecryptViewSecret() {
+            var secretElement = document.getElementById("view-secret");
+            if (secretElement == null) {
+                return;
+            }
+
+            var masterPassword = window.sessionStorage.getItem('pamp');
+            if (masterPassword == null) {
+                window.location.replace("/login");
+                return;
+            }
+
+            var secretDecrypted = decrypt(secretElement.innerHTML, masterPassword);
+            secretElement.innerHTML = secretDecrypted;
         }
     </script>
 </head>
