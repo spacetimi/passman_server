@@ -11,7 +11,7 @@ import (
 )
 
 const kBlobName = "user_websites"
-const kVersion = 1
+const kVersion = 2
 
 // Implements IBlob
 type UserWebsitesBlob struct {
@@ -27,8 +27,8 @@ type UserWebsite struct {
 }
 
 type UserWebsiteCredentials struct {
-	UserAlias string
-	Version   int
+	UserAlias         string
+	PasswordEncrypted string
 }
 
 func LoadByUserId(userId int64, ctx context.Context, create bool) (*UserWebsitesBlob, error) {
@@ -79,7 +79,7 @@ func (userWebsite *UserWebsite) GetCredentialsForUserAlias(userAlias string) *Us
 	return nil
 }
 
-func (blob *UserWebsitesBlob) AddOrModifyUserWebsiteCredentials(websiteName string, userAlias string, ctx context.Context) error {
+func (blob *UserWebsitesBlob) AddOrModifyUserWebsiteCredentials(websiteName string, userAlias string, passwordEncrypted string, ctx context.Context) error {
 	userWebsite := blob.GetUserWebsite(websiteName)
 	if userWebsite == nil {
 		userWebsite = &UserWebsite{
@@ -91,12 +91,12 @@ func (blob *UserWebsitesBlob) AddOrModifyUserWebsiteCredentials(websiteName stri
 	credentialsForUserAlias := userWebsite.GetCredentialsForUserAlias(userAlias)
 	if credentialsForUserAlias == nil {
 		credentialsForUserAlias = &UserWebsiteCredentials{
-			UserAlias: userAlias,
-			Version:   1,
+			UserAlias:         userAlias,
+			PasswordEncrypted: passwordEncrypted,
 		}
 		userWebsite.UserWebsiteCredentialsList = append(userWebsite.UserWebsiteCredentialsList, credentialsForUserAlias)
 	} else {
-		credentialsForUserAlias.Version = credentialsForUserAlias.Version + 1
+		credentialsForUserAlias.PasswordEncrypted = passwordEncrypted
 	}
 
 	// TODO: Avi: Move this somewhere else (like a set-dirty thing for transactions)

@@ -22,51 +22,19 @@
                         {{ range .UserAliases }}
                             <span>
                                 <div class="btn-group pt-2 pb-2" role="group">
-                                    <a href="#" class="btn btn-primary border border-secondary rounded-left small" data-toggle="modal" data-target="#viewPasswordModal_{{ $.WebsiteName }}_{{ . }}">
-                                        {{ . }}&nbsp;<img src="/app-images/view_icon.png">
-                                    </a>
-                                    <a href="#" target="_blank" class="btn btn-warning border border-secondary rounded-right small" data-toggle="modal" data-target="#changePasswordModal_{{ $.WebsiteName }}_{{ . }}">
-                                        <img src="/app-images/regenerate_icon.png">
-                                    </a>
+                                    <form method="POST">
+                                        <input type="hidden" name="websiteName" value="{{ $.WebsiteName }}">
+                                        <input type="hidden" name="userAlias" value="{{ . }}">
+                                        <button type="submit" formaction="/viewPassword" id="view_password_button" class="btn btn-primary">
+                                            {{ . }}&nbsp;<img src="/app-images/view_icon.png">
+                                        </button>
+                                        <a href="#" target="_blank" class="btn btn-warning border border-secondary rounded-right small" data-toggle="modal" data-target="#changePasswordModal_{{ $.WebsiteName }}_{{ . }}">
+                                            <img src="/app-images/regenerate_icon.png">
+                                        </a>
+                                    </form>
                                 </div>
                             </span>
 
-
-
-                            <!-- View Password Modal -->
-                            <div class="modal fade" id="viewPasswordModal_{{ $.WebsiteName }}_{{ . }}" tabindex="-1" role="dialog" aria-labelledby="viewPasswordModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="viewPasswordModalLabel">View Password for {{ . }} @ {{ $.WebsiteName }}</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-
-                                        <form method="post">
-
-                                            <div class="modal-body">
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">Master Password</span>
-                                                    </div>
-                                                    <input type="hidden" name="websiteName" value="{{ $.WebsiteName }}">
-                                                    <input type="hidden" name="userAlias" value="{{ . }}">
-                                                    <input type="password" name="masterPassword" class="form-control" placeholder="" aria-label="MasterPassword">
-                                                </div>
-
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" id="close_button" data-dismiss="modal">Close</button>
-                                                <button type="submit" id="view_password_button" formaction="/viewPassword" onclick="showLoadingSpinner('view_password_button')" class="btn btn-primary">View Password</button>
-                                            </div>
-
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
 
                             <!-- Change Password Modal -->
                             <div class="modal fade" id="changePasswordModal_{{ $.WebsiteName }}_{{ . }}" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">

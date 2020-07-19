@@ -1,5 +1,15 @@
 {{ template "app_login_header_template.html" . }}
 
+<script>
+    function setLoggedInSession() {
+        var passwordField = document.getElementById('passman-master-password');
+        if (passwordField == null || passwordField.value == null) {
+            return;
+        }
+        window.sessionStorage.setItem('pamp', passwordField.value);
+    }
+</script>
+
 <div class="container h-100">
     <div class="row h-100 justify-content-center align-items-center">
         <div class="inset col-10 col-md-8 col-lg-6 rounded border border-secondary pb-3">
@@ -25,11 +35,11 @@
                     <input type="text" class="form-control username" id="username" placeholder="Username..." name="username">
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control password" id="password" placeholder="Password..." name="password">
+                    <input type="password" class="form-control password" id="passman-master-password" placeholder="Password..." name="password">
                 </div>
 
                 <div class="row h-100 justify-content-center align-items-center pl-3 pr-3">
-                    <button type="submit" class="action-button btn btn-block border border-light"><h5 class="text-muted">Login</h5></button>
+                    <button type="submit" class="action-button btn btn-block border border-light" onclick="setLoggedInSession()"><h5 class="text-muted">Login</h5></button>
                 </div>
 
                 <hr/>

@@ -44,29 +44,39 @@
                  </button>
              </div>
 
-             <form method="post">
+             <form id="addWebsiteForm" action="/addNewWebsite" method="POST">
                  <div class="modal-body">
                      <div class="form-group">
-                         <div class="input-group mb-3">
-                             <div class="input-group-prepend">
-                                 <span class="input-group-text" id="basic-addon1">Website Name</span>
-                             </div>
-                             <input type="text" id="websiteName" name="websiteName" class="form-control" placeholder="gmail" aria-label="Website Name" aria-describedby="basic-addon1">
-                         </div>
-                         <div class="input-group mb-3">
-                             <div class="input-group-prepend">
-                                 <span class="input-group-text" id="basic-addon1">User Alias</span>
-                             </div>
-                             <input type="text" id="userAlias" name="userAlias" class="form-control" placeholder="john.doe" aria-label="User Alias" aria-describedby="basic-addon1">
-                         </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Website Name</span>
+                            </div>
+                            <input type="text" id="newWebsiteWebsiteName" name="websiteName" class="form-control" placeholder="gmail" aria-label="Website Name" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">User Alias</span>
+                            </div>
+                            <input type="text" id="newWebsiteUserAlias" name="userAlias" class="form-control" placeholder="john.doe" aria-label="User Alias" aria-describedby="basic-addon1">
+                        </div>
+                        <input type="hidden" id="passwordEncrypted" name="passwordEncrypted" value="placeholder--will-be-set-by-js">
                      </div>
                  </div>
                  <div class="modal-footer">
                      <button type="button" id="close_button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                     <button type="submit" id="add_new_website_button" formaction="/addNewWebsite" onclick="showLoadingSpinner('add_new_website_button')" class="btn btn-primary">Add</button>
+                     <button type="button" id="add_new_website_button2" onclick="processAddWebsite()" class="btn btn-primary">Add</button>
                  </div>
              </form>
          </div>
      </div>
  </div>
 
+ <script>
+    function processAddWebsite() {
+        masterPassword = window.sessionStorage.getItem('pamp');
+        password = generatePassword(12);
+        passwordEncrypted = encrypt(password, masterPassword);
+        document.getElementById("passwordEncrypted").value = passwordEncrypted;
+        document.getElementById("addWebsiteForm").submit();
+    }
+ </script>

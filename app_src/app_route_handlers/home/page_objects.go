@@ -1,46 +1,46 @@
 package home
 
 type PageObjectBase struct {
-    HasError bool
-    ErrorString string
+	HasError    bool
+	ErrorString string
 
-    Username string
-    UserId int64
+	Username string
+	UserId   int64
 }
 
 type HomePageObject struct {
-    PageObjectBase
+	PageObjectBase
 
-    UserWebsiteCards []UserWebsiteCardObject
-    UserSecretCards []UserSecretCardObject
+	UserWebsiteCards []UserWebsiteCardObject
+	UserSecretCards  []UserSecretCardObject
 }
 
 type UserWebsiteCardObject struct {
-    WebsiteName string
-    UserAliases []string
+	WebsiteName string
+	UserAliases []string
 }
 
 type UserSecretCardObject struct {
-    SecretNameEscaped string
-    SecretName string
+	SecretNameEscaped string
+	SecretName        string
 }
 
 type ViewPasswordPageObject struct {
-    PageObjectBase
+	PageObjectBase
 
-    UserAlias string
-    WebsiteName string
-    Password string
+	UserAlias         string
+	WebsiteName       string
+	PasswordEncrypted string
 }
 
 type ViewSecretPageObject struct {
-    PageObjectBase
+	PageObjectBase
 
-    SecretName string
-    SecretValue string
+	SecretName  string
+	SecretValue string
 }
 
 func (po *PageObjectBase) SetError(errorString string) {
-    po.HasError = true
-    po.ErrorString = errorString
+	po.HasError = true
+	po.ErrorString = errorString
 }

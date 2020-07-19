@@ -9,6 +9,10 @@
 
     <title>Passman</title>
 
+    <!-- Required Javascript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js" integrity="sha256-/H4YS+7aYb9kJ5OKhFYPUjSJdrtV6AeyJOtTkw6X72o=" crossorigin="anonymous"></script>
+
     <!-- CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,600">
@@ -48,9 +52,66 @@
         }
 
     </style>
+
+    <script>
+        function encrypt(body, secret) {
+            return CryptoJS.AES.encrypt(body, secret);
+        }
+
+        function decrypt(encrypted, secret) {
+            return CryptoJS.AES.decrypt(encrypted, secret).toString(CryptoJS.enc.Utf8);
+        }
+
+        function generatePassword(length) {
+            length = (length > 4) ? length : 5;
+            var lower = "abcdefghijklmnopqrstuvwxyz";
+            var upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var numbers = "1234567890";
+            var special = "!@#$%^&*()-+<>";
+            var chars = lower + upper + numbers + special;
+
+            var password = "";
+            for (var x = 0; x < (length - 4); ++x) {
+                var i = Math.floor(Math.random() * chars.length);
+                password += chars.charAt(i);
+            }
+            password += lower.charAt(Math.floor(Math.random() * lower.length));
+            password += upper.charAt(Math.floor(Math.random() * upper.length));
+            password += numbers.charAt(Math.floor(Math.random() * numbers.length));
+            password += special.charAt(Math.floor(Math.random() * special.length));
+
+            var passwordArray = password.split('');
+            for (var n = 0; n < 200; ++n) {
+                var i = Math.floor(Math.random() * length);
+                var j = Math.floor(Math.random() * length);
+                var temp = passwordArray[i];
+                passwordArray[i] = passwordArray[j];
+                passwordArray[j] = temp;
+            }
+            password = passwordArray.join('');
+
+            return password;
+        }
+
+        function onBodyLoaded() {
+            var passwordElement = document.getElementById("view-password");
+            if (passwordElement == null) {
+                return;
+            }
+
+            var masterPassword = window.sessionStorage.getItem('pamp');
+            if (masterPassword == null) {
+                window.location.replace("/login");
+                return;
+            }
+
+            var password = decrypt(passwordElement.innerHTML, masterPassword);
+            passwordElement.innerHTML = password;
+        }
+    </script>
 </head>
 
-<body class="bg h-100">
+<body class="bg h-100" onload="onBodyLoaded()">
 
 <div class="pos-f-t">
 
