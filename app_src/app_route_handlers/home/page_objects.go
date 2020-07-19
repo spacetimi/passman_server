@@ -16,8 +16,9 @@ type HomePageObject struct {
 }
 
 type UserWebsiteCardObject struct {
-	WebsiteName string
-	UserAliases []string
+	WebsiteName        string
+	WebsiteNameEscaped string
+	UserAliases        []string
 }
 
 type UserSecretCardObject struct {
