@@ -1,5 +1,23 @@
 {{ template "app_login_header_template.html" . }}
 
+<script>
+    function encryptPasswords() {
+        // Overwrite password with its hash
+
+        var masterPasswordField = document.getElementById('master-password');
+        if (masterPasswordField == null || masterPasswordField.value == null) {
+            return;
+        }
+        masterPasswordField.value = sha512(masterPasswordField.value)
+
+        var retypePasswordField = document.getElementById('retype-master-password');
+        if (retypePasswordField == null || retypePasswordField.value == null) {
+            return;
+        }
+        retypePasswordField.value = sha512(retypePasswordField.value)
+    }
+</script>
+
 <div class="container h-100">
     <div class="row h-100 justify-content-center align-items-center">
         <div class="inset col-10 col-md-8 col-lg-6 rounded border border-secondary pb-3">
@@ -38,14 +56,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control password" id="password" placeholder="Password..." name="new_password">
+                    <input type="password" class="form-control password" id="master-password" placeholder="Password..." name="new_password">
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control password" id="retype password" placeholder="Retype Password..." name="retype_password">
+                    <input type="password" class="form-control password" id="retype-master-password" placeholder="Retype Password..." name="retype_password">
                 </div>
 
                 <div class="row h-100 justify-content-center align-items-center pl-3 pr-3">
-                    <button type="submit" id="createAccountButton" class="action-button btn btn-block border border-light" onclick="showLoadingSpinner('createAccountButton')"><h5 class="text-muted">Create Account</h5></button>
+                    <button type="submit" id="createAccountButton" class="action-button btn btn-block border border-light" onclick="encryptPasswords()"><h5 class="text-muted">Create Account</h5></button>
                 </div>
 
                 <hr/>

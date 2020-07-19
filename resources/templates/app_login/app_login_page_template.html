@@ -2,11 +2,14 @@
 
 <script>
     function setLoggedInSession() {
-        var passwordField = document.getElementById('passman-master-password');
-        if (passwordField == null || passwordField.value == null) {
+        var masterPasswordField = document.getElementById('passman-master-password');
+        if (masterPasswordField == null || masterPasswordField.value == null) {
             return;
         }
-        window.sessionStorage.setItem('pamp', passwordField.value);
+        window.sessionStorage.setItem('pamp', masterPasswordField.value);
+
+        // Overwrite the masterPasswordField with its hash
+        masterPasswordField.value = sha512(masterPasswordField.value);
     }
 </script>
 
