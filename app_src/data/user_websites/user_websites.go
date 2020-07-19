@@ -131,8 +131,32 @@ func (blob *UserWebsitesBlob) DeleteUserWebsiteCredentials(websiteName string, u
 	userWebsite.UserWebsiteCredentialsList = append(userWebsite.UserWebsiteCredentialsList[:index],
 		userWebsite.UserWebsiteCredentialsList[index+1:]...)
 
-	// copy(userWebsite.UserWebsiteCredentialsList[index:], userWebsite.UserWebsiteCredentialsList[index+1:])
-	// userWebsite.UserWebsiteCredentialsList = userWebsite.UserWebsiteCredentialsList[:l-1]
+	// TODO: Avi: Move this somewhere else (like a set-dirty thing for transactions)
+	err := storage_service.SetBlob(blob, ctx)
+	if err != nil {
+		logger.LogError("error saving blob"+
+			"|blob name="+kBlobName+
+			"|user id="+strconv.FormatInt(blob.UserId, 10),
+			"|error="+err.Error())
+		return errors.New("error saving changes")
+	}
+
+	return nil
+}
+
+func (blob *UserWebsitesBlob) DeleteUserWebsite(websiteName string, ctx context.Context) error {
+
+	l := len(blob.UserWebsites)
+	index := slice_utils.FindIndexInSlice(l, func(index int) bool {
+		return blob.UserWebsites[index].WebsiteName == websiteName
+	})
+
+	if index < 0 || index >= l {
+		return errors.New("no such website for user")
+	}
+
+	blob.UserWebsites = append(blob.UserWebsites[:index],
+		blob.UserWebsites[index+1:]...)
 
 	// TODO: Avi: Move this somewhere else (like a set-dirty thing for transactions)
 	err := storage_service.SetBlob(blob, ctx)

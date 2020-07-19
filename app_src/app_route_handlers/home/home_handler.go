@@ -32,6 +32,7 @@ func (hh *HomeHandler) Routes() []controller.Route {
 		controller.NewRoute(app_routes.Home, []controller.RequestMethodType{controller.GET, controller.POST}),
 		controller.NewRoute(app_routes.HomeSlash, []controller.RequestMethodType{controller.GET, controller.POST}),
 		controller.NewRoute(app_routes.AddNewWebsite, []controller.RequestMethodType{controller.POST}),
+		controller.NewRoute(app_routes.DeleteWebsite, []controller.RequestMethodType{controller.POST}),
 		controller.NewRoute(app_routes.GenerateNewPassword, []controller.RequestMethodType{controller.POST}),
 		controller.NewRoute(app_routes.DeleteUserAlias, []controller.RequestMethodType{controller.POST}),
 		controller.NewRoute(app_routes.ViewPassword, []controller.RequestMethodType{controller.POST}),
@@ -70,6 +71,9 @@ func (hh *HomeHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, reque
 		fallthrough
 	case app_routes.GenerateNewPassword:
 		hh.handleAddOrModifyUserWebsiteCredentials(user, httpResponseWriter, request, args)
+
+	case app_routes.DeleteWebsite:
+		hh.handleDeleteWebsite(user, httpResponseWriter, request, args)
 
 	case app_routes.DeleteUserAlias:
 		hh.handleDeleteUserAlias(user, httpResponseWriter, request, args)

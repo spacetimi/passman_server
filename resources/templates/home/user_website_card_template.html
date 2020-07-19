@@ -13,9 +13,18 @@
 
     <div id="{{ .WebsiteNameEscaped }}" class="collapse" aria-labelledby="user-website-name" data-parent="#user-website-name">
         <div class="card-body">
-            <label class="small text-muted">
-            Aliases for {{ .WebsiteName }}:
-            </label>
+
+            <div class="d-flex justify-content-between">
+                <label class="small text-muted">
+                        Aliases for {{ .WebsiteName }}:
+                </label>
+                <button type="button" class="btn btn-danger btn-sm float-right" data-toggle="modal" data-target="#deleteWebsiteModal_{{ .WebsiteNameEscaped }}" title="Delete Website">
+                    <img src="/app-images/delete_icon.png">
+                </button>
+            </div>
+
+            <br>
+
             <div class="container-fluid">
                 <ul class="list-group">
                     <li class="list-group-item">
@@ -157,5 +166,30 @@
 </div>
 
 
+<!-- Delete Website Modal -->
+<div class="modal fade" id="deleteWebsiteModal_{{ .WebsiteNameEscaped }}" tabindex="-1" role="dialog" aria-labelledby="deleteWebsiteModalTitle" aria-hidden="true">
+     <div class="modal-dialog modal-dialog-centered" role="document">
+         <div class="modal-content">
+             <div class="modal-header bg-dark text-light">
+                 <h5 class="modal-title" id="deleteWebsiteModalTitle">Delete Website: {{ .WebsiteName }} ?</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true" class="text-light">&times;</span>
+                 </button>
+             </div>
 
-
+             <form action="/deleteWebsite" method="POST">
+                 <div class="modal-body">
+                     <div class="form-group">
+                        <h6 class="text-secondary">This action cannot be undone.</h6>
+                        <br/>
+                        <input type="hidden" name="websiteName" value="{{ $.WebsiteName }}">
+                     </div>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" id="close_button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                     <button type="submit" id="delete_website_button" onclick="showLoadingSpinner('delete_website_button')" class="btn btn-danger">Delete</button>
+                 </div>
+             </form>
+         </div>
+     </div>
+ </div>

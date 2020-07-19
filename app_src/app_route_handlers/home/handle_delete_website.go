@@ -13,12 +13,11 @@ import (
 	"github.com/spacetimi/timi_shared_server/utils/logger"
 )
 
-const kDeleteUserAliasPostArgWebsiteName = "websiteName"
-const kDeleteUserAliasPostArgUserAlias = "userAlias"
+const kDeleteWebsitePostArgWebsiteName = "websiteName"
 
-func (hh *HomeHandler) handleDeleteUserAlias(user *identity_service.UserBlob, httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
+func (hh *HomeHandler) handleDeleteWebsite(user *identity_service.UserBlob, httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
 
-	parsedArgs, err := parseDeleteUserAliasPostArgs(args.PostArgs)
+	parsedArgs, err := parseDeleteWebsitePostArgs(args.PostArgs)
 	if err != nil {
 		// Show error message and return
 		messageHeader := "Something went wrong"
@@ -41,12 +40,11 @@ func (hh *HomeHandler) handleDeleteUserAlias(user *identity_service.UserBlob, ht
 		return
 	}
 
-	err = userWebsites.DeleteUserWebsiteCredentials(parsedArgs.WebsiteName, parsedArgs.UserAlias, request.Context())
+	err = userWebsites.DeleteUserWebsite(parsedArgs.WebsiteName, request.Context())
 	if err != nil {
-		logger.LogError("error deleting user alias from blob" +
+		logger.LogError("error deleting user website from blob" +
 			"|user id=" + strconv.FormatInt(user.UserId, 10) +
 			"|website name=" + parsedArgs.WebsiteName +
-			"|user alias=" + parsedArgs.UserAlias +
 			"|error=" + err.Error())
 		// Show error message and return
 		messageHeader := "Something went wrong"
@@ -56,32 +54,24 @@ func (hh *HomeHandler) handleDeleteUserAlias(user *identity_service.UserBlob, ht
 		return
 	}
 
-	messageHeader := "Deleted " + parsedArgs.UserAlias + " @ " + parsedArgs.WebsiteName
+	messageHeader := "Deleted Website: " + parsedArgs.WebsiteName
 	messageBody := ""
 	backlinkName := "<< Home"
 	app_simple_message_page.ShowAppSimpleMessagePage(httpResponseWriter, messageHeader, messageBody, app_routes.HomeSlash, backlinkName)
 	return
 }
 
-type DeleteUserAliasPostArgs struct {
+type DeleteWebsitePostArgs struct {
 	WebsiteName string
-	UserAlias   string
 }
 
-func parseDeleteUserAliasPostArgs(postArgs map[string]string) (*DeleteUserAliasPostArgs, error) {
+func parseDeleteWebsitePostArgs(postArgs map[string]string) (*DeleteWebsitePostArgs, error) {
 	websiteName, ok := postArgs[kDeleteUserAliasPostArgWebsiteName]
 	if !ok || len(websiteName) == 0 {
 		return nil, errors.New("* website name cannot be empty")
 	}
 
-	userAlias, ok := postArgs[kDeleteUserAliasPostArgUserAlias]
-	if !ok || len(userAlias) == 0 {
-		return nil, errors.New("* user alias cannot be empty")
-	}
-
-	return &DeleteUserAliasPostArgs{
+	return &DeleteWebsitePostArgs{
 		WebsiteName: websiteName,
-		UserAlias:   userAlias,
 	}, nil
-
 }

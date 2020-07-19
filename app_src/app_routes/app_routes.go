@@ -18,6 +18,7 @@ const ResetPasswordBase = "/resetPassword/"
 const ResetPassword = ResetPasswordBase + "{rediskey}"
 
 const AddNewWebsite = "/addNewWebsite"
+const DeleteWebsite = "/deleteWebsite"
 const GenerateNewPassword = "/generateNewPassword"
 const DeleteUserAlias = "/deleteUserAlias"
 const ViewPassword = "/viewPassword"
