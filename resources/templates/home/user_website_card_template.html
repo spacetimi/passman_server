@@ -25,11 +25,14 @@
                                     <form method="POST">
                                         <input type="hidden" name="websiteName" value="{{ $.WebsiteName }}">
                                         <input type="hidden" name="userAlias" value="{{ .Alias }}">
-                                        <button type="submit" formaction="/viewPassword" id="view_password_button" class="btn btn-primary">
+                                        <button type="submit" formaction="/viewPassword" id="view_password_button" class="btn btn-primary btn-sm">
                                             {{ .Alias }}&nbsp;<img src="/app-images/view_icon.png">
                                         </button>
-                                        <a href="#" target="_blank" class="btn btn-warning border border-secondary rounded-right small" data-toggle="modal" data-target="#changePasswordModal_{{ $.WebsiteNameEscaped }}_{{ .AliasEscaped }}">
+                                        <a href="#" target="_blank" class="btn btn-warning btn-sm border border-secondary rounded-right small" data-toggle="modal" data-target="#changePasswordModal_{{ $.WebsiteNameEscaped }}_{{ .AliasEscaped }}">
                                             <img src="/app-images/regenerate_icon.png">
+                                        </a>
+                                        <a href="#" target="_blank" class="btn btn-danger btn-sm border border-secondary rounded-right small" data-toggle="modal" data-target="#deleteUserAliasModal_{{ $.WebsiteNameEscaped }}_{{ .AliasEscaped }}">
+                                            <img src="/app-images/delete_icon.png">
                                         </a>
                                     </form>
                                 </div>
@@ -70,11 +73,44 @@
                                 </div>
                             </div>
 
+                            <!-- Delete UserAlias Modal -->
+                            <div class="modal fade" id="deleteUserAliasModal_{{ $.WebsiteNameEscaped }}_{{ .AliasEscaped }}" tabindex="-1" role="dialog" aria-labelledby="deleteUserAliasModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteUserAliasModalLabel">Delete user-alias {{ .Alias }} @ {{ $.WebsiteName }} ?</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <form id="deleteUserAlias_{{ $.WebsiteNameEscaped }}_{{ .AliasEscaped }}" method="post" action="/deleteUserAlias">
+
+                                            <div class="modal-body">
+                                                <div class="input-group mb-3">
+                                                    <h6 class="text-secondary">This action cannot be undone.</h6>
+                                                    <br/>
+                                                    <input type="hidden" name="websiteName" value="{{ $.WebsiteName }}">
+                                                    <input type="hidden" name="userAlias" value="{{ .Alias }}">
+                                                </div>
+
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" id="close_button" data-dismiss="modal">Close</button>
+                                                <button type="submit" id="delete_user_alias_button" onclick="showLoadingSpinner('delete_user_alias_button')" class="btn btn-danger">Delete</button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
                             &nbsp;
                         {{ end }}
                         <span>
                             <div class="btn-group pt-2 pb-2" role="group">
-                                <a href="#" target="_blank" class="btn btn-success border border-dark small" data-toggle="modal" data-target="#addNewUserAliasModal_{{ .WebsiteNameEscaped }}">
+                                <a href="#" target="_blank" class="btn btn-success btn-sm border border-dark small" data-toggle="modal" data-target="#addNewUserAliasModal_{{ .WebsiteNameEscaped }}">
                                     Add New&nbsp;<img src="/images/plus.png">
                                 </a>
                             </div>

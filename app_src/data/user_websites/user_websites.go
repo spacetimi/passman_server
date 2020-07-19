@@ -8,6 +8,7 @@ import (
 	"github.com/spacetimi/timi_shared_server/code/core/services/storage_service"
 	"github.com/spacetimi/timi_shared_server/code/core/services/storage_service/storage_typedefs"
 	"github.com/spacetimi/timi_shared_server/utils/logger"
+	"github.com/spacetimi/timi_shared_server/utils/slice_utils"
 )
 
 const kBlobName = "user_websites"
@@ -98,6 +99,40 @@ func (blob *UserWebsitesBlob) AddOrModifyUserWebsiteCredentials(websiteName stri
 	} else {
 		credentialsForUserAlias.PasswordEncrypted = passwordEncrypted
 	}
+
+	// TODO: Avi: Move this somewhere else (like a set-dirty thing for transactions)
+	err := storage_service.SetBlob(blob, ctx)
+	if err != nil {
+		logger.LogError("error saving blob"+
+			"|blob name="+kBlobName+
+			"|user id="+strconv.FormatInt(blob.UserId, 10),
+			"|error="+err.Error())
+		return errors.New("error saving changes")
+	}
+
+	return nil
+}
+
+func (blob *UserWebsitesBlob) DeleteUserWebsiteCredentials(websiteName string, userAlias string, ctx context.Context) error {
+	userWebsite := blob.GetUserWebsite(websiteName)
+	if userWebsite == nil {
+		return errors.New("no such website for user")
+	}
+
+	l := len(userWebsite.UserWebsiteCredentialsList)
+
+	index := slice_utils.FindIndexInSlice(l, func(index int) bool {
+		return userWebsite.UserWebsiteCredentialsList[index].UserAlias == userAlias
+	})
+	if index < 0 || index >= l {
+		return errors.New("no such user alias")
+	}
+
+	userWebsite.UserWebsiteCredentialsList = append(userWebsite.UserWebsiteCredentialsList[:index],
+		userWebsite.UserWebsiteCredentialsList[index+1:]...)
+
+	// copy(userWebsite.UserWebsiteCredentialsList[index:], userWebsite.UserWebsiteCredentialsList[index+1:])
+	// userWebsite.UserWebsiteCredentialsList = userWebsite.UserWebsiteCredentialsList[:l-1]
 
 	// TODO: Avi: Move this somewhere else (like a set-dirty thing for transactions)
 	err := storage_service.SetBlob(blob, ctx)
