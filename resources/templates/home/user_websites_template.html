@@ -64,7 +64,7 @@
                  </div>
                  <div class="modal-footer">
                      <button type="button" id="close_button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                     <button type="button" id="add_new_website_button2" onclick="processAddWebsite()" class="btn btn-primary">Add</button>
+                     <button type="button" id="add_new_website_button2" onclick="generatePasswordInElementAndSubmit('passwordEncrypted', 'addWebsiteForm')" class="btn btn-primary">Add</button>
                  </div>
              </form>
          </div>
@@ -72,11 +72,25 @@
  </div>
 
  <script>
-    function processAddWebsite() {
+    function generatePasswordInElementAndSubmit(elementName, formElementName) {
+        var passwordElement = document.getElementById(elementName);
+        if (passwordElement == null) {
+            alert("Something went wrong while trying to generate password")
+            return;
+        }
+
+        var formElement = document.getElementById(formElementName);
+        if (formElement == null) {
+            alert("Something went wrong while trying to submit the request")
+            return;
+        }
+
         masterPassword = window.sessionStorage.getItem('pamp');
         password = generatePassword(12);
         passwordEncrypted = encrypt(password, masterPassword);
-        document.getElementById("passwordEncrypted").value = passwordEncrypted;
-        document.getElementById("addWebsiteForm").submit();
+
+        passwordElement.value = passwordEncrypted;
+
+        formElement.submit();
     }
  </script>

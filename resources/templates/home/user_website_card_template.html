@@ -47,7 +47,7 @@
                                             </button>
                                         </div>
 
-                                        <form method="post">
+                                        <form id="generateNewPassword_{{ $.WebsiteName }}_{{ . }}" method="post" action="/generateNewPassword">
 
                                             <div class="modal-body">
                                                 <div class="input-group mb-3">
@@ -55,13 +55,14 @@
                                                     <br/>
                                                     <input type="hidden" name="websiteName" value="{{ $.WebsiteName }}">
                                                     <input type="hidden" name="userAlias" value="{{ . }}">
+                                                    <input type="hidden" id="passwordEncrypted_{{ $.WebsiteName }}_{{ . }}" name="passwordEncrypted" value="placeholder--will-be-set-by-js">
                                                 </div>
 
                                             </div>
 
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" id="close_button" data-dismiss="modal">Close</button>
-                                                <button type="submit" id="change_password_button" formaction="/generateNewPassword" onclick="showLoadingSpinner('change_password_button')" class="btn btn-primary">Generate New Password</button>
+                                                <button type="submit" id="change_password_button" formaction="/generateNewPassword" onclick="generatePasswordInElementAndSubmit('passwordEncrypted_{{ $.WebsiteName }}_{{ . }}', 'generateNewPassword_{{ $.WebsiteName }}_{{ . }}')" class="btn btn-primary">Generate New Password</button>
                                             </div>
 
                                         </form>
@@ -73,11 +74,45 @@
                         {{ end }}
                         <span>
                             <div class="btn-group pt-2 pb-2" role="group">
-                                <a href="#" target="_blank" class="btn btn-success border border-dark small">
+                                <a href="#" target="_blank" class="btn btn-success border border-dark small" data-toggle="modal" data-target="#addNewUserAliasModal">
                                     Add New&nbsp;<img src="/images/plus.png">
                                 </a>
                             </div>
                         </span>
+
+                        <!-- Add new user-alias to website modal -->
+                        <div class="modal fade" id="addNewUserAliasModal" tabindex="-1" role="dialog" aria-labelledby="addNewUserAliasModalTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-dark text-light">
+                                        <h5 class="modal-title" id="addNewUserAliasModalTitle">Add New User Alias for {{ .WebsiteName }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true" class="text-light">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <form id="addUserAlias_{{ .WebsiteName }}" action="/addNewWebsite" method="POST">
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <input type="hidden" id="newWebsiteWebsiteName" name="websiteName" value="{{ .WebsiteName }}">
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="basic-addon1">New User Alias</span>
+                                                    </div>
+                                                    <input type="text" id="newWebsiteUserAlias" name="userAlias" class="form-control" placeholder="john.doe" aria-label="User Alias" aria-describedby="basic-addon1">
+                                                </div>
+                                                <input type="hidden" id="passwordEncrypted_{{ .WebsiteName }}" name="passwordEncrypted" value="placeholder--will-be-set-by-js">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" id="close_button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" id="add_new_website_button2" onclick="generatePasswordInElementAndSubmit('passwordEncrypted_{{ .WebsiteName }}', 'addUserAlias_{{ .WebsiteName }}')" class="btn btn-primary">Add</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                     </li>
                 </ul>
             </div>
