@@ -45,7 +45,10 @@ func (hh *HomeHandler) handleHome(user *identity_service.UserBlob, httpResponseW
 			WebsiteNameEscaped: string_utils.RemoveSpecialCharactersForHtmlId(userWebsite.WebsiteName),
 		}
 		for _, userCredential := range userWebsite.UserWebsiteCredentialsList {
-			userWebsiteCard.UserAliases = append(userWebsiteCard.UserAliases, userCredential.UserAlias)
+			userWebsiteCard.UserAliases = append(userWebsiteCard.UserAliases, UserAliasCardObject{
+				Alias:        userCredential.UserAlias,
+				AliasEscaped: string_utils.RemoveSpecialCharactersForHtmlId(userCredential.UserAlias),
+			})
 		}
 
 		pageObject.UserWebsiteCards = append(pageObject.UserWebsiteCards, userWebsiteCard)

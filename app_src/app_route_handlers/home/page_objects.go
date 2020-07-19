@@ -18,7 +18,12 @@ type HomePageObject struct {
 type UserWebsiteCardObject struct {
 	WebsiteName        string
 	WebsiteNameEscaped string
-	UserAliases        []string
+	UserAliases        []UserAliasCardObject
+}
+
+type UserAliasCardObject struct {
+	Alias        string
+	AliasEscaped string
 }
 
 type UserSecretCardObject struct {
