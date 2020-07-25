@@ -26,3 +26,5 @@ const ViewPassword = "/viewPassword"
 const AddNewSecret = "/addNewSecret"
 const ViewSecret = "/viewSecret"
 const DeleteSecret = "/deleteSecret"
+
+const AddFileToVault = "/addFileToVault"
