@@ -7,17 +7,17 @@ import (
 
 	"github.com/spacetimi/passman_server/app_src/app_routes"
 	"github.com/spacetimi/passman_server/app_src/app_utils/app_simple_message_page"
-	"github.com/spacetimi/passman_server/app_src/data/user_secrets"
+	"github.com/spacetimi/passman_server/app_src/data/user_files"
 	"github.com/spacetimi/timi_shared_server/code/core/controller"
 	"github.com/spacetimi/timi_shared_server/code/core/services/identity_service"
 	"github.com/spacetimi/timi_shared_server/utils/logger"
 )
 
-const kDeleteSecretPostArgSecretName = "secretname"
+const kDeleteFilePostArgFileName = "fileName"
 
-func (hh *HomeHandler) handleDeleteSecret(user *identity_service.UserBlob, httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
+func (hh *HomeHandler) handleDeleteFileFromVault(user *identity_service.UserBlob, httpResponseWriter http.ResponseWriter, request *http.Request, args *controller.HandlerFuncArgs) {
 
-	secretName, err := parseDeleteSecretPostArgs(args.PostArgs)
+	fileName, err := parseDeleteFilePostArgs(args.PostArgs)
 	if err != nil {
 		// Show error message and return
 		messageHeader := "Something went wrong"
@@ -27,9 +27,9 @@ func (hh *HomeHandler) handleDeleteSecret(user *identity_service.UserBlob, httpR
 		return
 	}
 
-	userSecretsBlob, err := user_secrets.LoadByUserId(user.UserId, request.Context(), false)
+	userFilesBlob, err := user_files.LoadByUserId(user.UserId, request.Context(), false)
 	if err != nil {
-		logger.LogError("error finding user secrets blob" +
+		logger.LogError("error finding user files blob" +
 			"|user id=" + strconv.FormatInt(user.UserId, 10) +
 			"|error=" + err.Error())
 		// Show error message and return
@@ -40,11 +40,11 @@ func (hh *HomeHandler) handleDeleteSecret(user *identity_service.UserBlob, httpR
 		return
 	}
 
-	err = userSecretsBlob.DeleteSecret(secretName, request.Context())
+	err = userFilesBlob.DeleteFile(fileName, request.Context())
 	if err != nil {
-		logger.LogError("error deleting user secret" +
+		logger.LogError("error deleting user file from vault" +
 			"|user id=" + strconv.FormatInt(user.UserId, 10) +
-			"|secret name=" + secretName +
+			"|file name=" + fileName +
 			"|error=" + err.Error())
 		// Show error message and return
 		messageHeader := "Something went wrong"
@@ -55,18 +55,18 @@ func (hh *HomeHandler) handleDeleteSecret(user *identity_service.UserBlob, httpR
 	}
 
 	// Show success message and return
-	messageHeader := "Successfully deleted secret: " + secretName
+	messageHeader := "Successfully deleted file from vault: " + fileName
 	messageBody := ""
 	backlinkName := "<< Home"
 	app_simple_message_page.ShowAppSimpleMessagePage(httpResponseWriter, messageHeader, messageBody, app_routes.HomeSlash, backlinkName)
 	return
 }
 
-func parseDeleteSecretPostArgs(postArgs map[string]string) (string, error) {
-	secretName, ok := postArgs[kDeleteSecretPostArgSecretName]
-	if !ok || len(secretName) == 0 {
-		return "", errors.New("* secret name cannot be empty")
+func parseDeleteFilePostArgs(postArgs map[string]string) (string, error) {
+	fileName, ok := postArgs[kDeleteFilePostArgFileName]
+	if !ok || len(fileName) == 0 {
+		return "", errors.New("* file name cannot be empty")
 	}
 
-	return secretName, nil
+	return fileName, nil
 }

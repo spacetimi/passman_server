@@ -30,3 +30,31 @@
 
 </li>
 
+<!-- Delete File Modal -->
+<div class="modal fade" id="deleteFileModal_{{ .FileNameEscaped }}" tabindex="-1" role="dialog" aria-labelledby="deleteFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteFileModalLabel">Delete File: {{ .FileName }}?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form method="post">
+
+                <div class="modal-body">
+                    <input type="hidden" name="fileName" value="{{ .FileName }}">
+                    <h6 class="text-danger">Note: This operation cannot be undone.</h6>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="close_button" data-dismiss="modal">Close</button>
+                    <button type="submit" id="delete_file_button" formaction="/deleteFileFromVault" onclick="showLoadingSpinner('delete_file_button')" class="btn btn-danger">Delete File</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+

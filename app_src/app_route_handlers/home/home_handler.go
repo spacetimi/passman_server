@@ -41,6 +41,7 @@ func (hh *HomeHandler) Routes() []controller.Route {
 		controller.NewRoute(app_routes.DeleteSecret, []controller.RequestMethodType{controller.POST}),
 		controller.NewRoute(app_routes.AddFileToVault, []controller.RequestMethodType{controller.POST}),
 		controller.NewRoute(app_routes.DownloadFileFromVault, []controller.RequestMethodType{controller.POST}),
+		controller.NewRoute(app_routes.DeleteFileFromVault, []controller.RequestMethodType{controller.POST}),
 	}
 }
 
@@ -97,6 +98,9 @@ func (hh *HomeHandler) HandlerFunc(httpResponseWriter http.ResponseWriter, reque
 
 	case app_routes.DownloadFileFromVault:
 		hh.handleDownloadFileFromVault(user, httpResponseWriter, request, args)
+
+	case app_routes.DeleteFileFromVault:
+		hh.handleDeleteFileFromVault(user, httpResponseWriter, request, args)
 
 	default:
 		logger.LogError("unknown route request|request url=" + request.URL.Path)

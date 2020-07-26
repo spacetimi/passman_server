@@ -29,3 +29,4 @@ const DeleteSecret = "/deleteSecret"
 
 const AddFileToVault = "/addFileToVault"
 const DownloadFileFromVault = "/downloadFileFromVault"
+const DeleteFileFromVault = "/deleteFileFromVault"
