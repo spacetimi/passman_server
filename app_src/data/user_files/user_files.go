@@ -55,6 +55,28 @@ func Create(userId int64, ctx context.Context) (*UserFilesBlob, error) {
 	return userFiles, nil
 }
 
+func (blob *UserFilesBlob) GetUserFileContentsByName(fileName string, filePassword string) ([]byte, error) {
+	var userFile *UserFile
+
+	for _, file := range blob.UserFiles {
+		if file.FileName == fileName {
+			userFile = file
+			break
+		}
+	}
+
+	if userFile == nil {
+		return nil, errors.New("no such file")
+	}
+
+	fileContentsDecrypted, err := encryption_utils.DecryptUsingAES(userFile.FileContentsEncrypted, filePassword)
+	if err != nil {
+		return nil, errors.New("error decrypting file, possibly wrong password")
+	}
+
+	return []byte(fileContentsDecrypted), nil
+}
+
 func (blob *UserFilesBlob) AddOrModifyFile(fileName string, fileContents string, filePassword string, ctx context.Context) error {
 
 	fileContentsEncrypted, err := encryption_utils.EncryptUsingAES(fileContents, filePassword)

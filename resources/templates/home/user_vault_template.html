@@ -43,6 +43,31 @@
 
         formElement.submit();
     }
+
+    function setFilePasswordAndSubmit(fileName, filePasswordElementName, formElementName) {
+
+        var formElement = document.getElementById(formElementName);
+        if (formElement == null) {
+            alert("Something went wrong while trying to submit the request")
+            return;
+        }
+
+        var filePasswordElement = document.getElementById(filePasswordElementName);
+        if (filePasswordElement == null) {
+            alert("Something went wrong while trying to submit the request")
+            return;
+        }
+
+        masterPassword = window.sessionStorage.getItem('pamp');
+        if (masterPassword == null) {
+            window.location.replace("/login");
+            return;
+        }
+
+        filePasswordElement.value = sha512(masterPassword + fileName);
+
+        formElement.submit();
+    }
 </script>
 
 <br/>

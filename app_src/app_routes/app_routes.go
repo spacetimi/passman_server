@@ -28,3 +28,4 @@ const ViewSecret = "/viewSecret"
 const DeleteSecret = "/deleteSecret"
 
 const AddFileToVault = "/addFileToVault"
+const DownloadFileFromVault = "/downloadFileFromVault"
