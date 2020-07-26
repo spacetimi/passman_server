@@ -80,10 +80,10 @@ func (blob *UserSecretsBlob) AddOrModifySecret(secretName string, secretDataEncr
 	// TODO: Avi: Move this somewhere else (like a set-dirty thing for transactions)
 	err = storage_service.SetBlob(blob, ctx)
 	if err != nil {
-		logger.LogError("error saving blob after add/modify secret"+
-			"|blob name="+kBlobName+
-			"|user id="+strconv.FormatInt(blob.UserId, 10),
-			"|error="+err.Error())
+		logger.LogError("error saving blob after add/modify secret" +
+			"|blob name=" + kBlobName +
+			"|user id=" + strconv.FormatInt(blob.UserId, 10) +
+			"|error=" + err.Error())
 		return errors.New("error saving changes")
 	}
 
@@ -107,10 +107,10 @@ func (blob *UserSecretsBlob) DeleteSecret(secretName string, ctx context.Context
 	// TODO: Avi: Move this somewhere else (like a set-dirty thing for transactions)
 	err := storage_service.SetBlob(blob, ctx)
 	if err != nil {
-		logger.LogError("error saving blob after deleting secret"+
-			"|blob name="+kBlobName+
-			"|user id="+strconv.FormatInt(blob.UserId, 10),
-			"|error="+err.Error())
+		logger.LogError("error saving blob after deleting secret" +
+			"|blob name=" + kBlobName +
+			"|user id=" + strconv.FormatInt(blob.UserId, 10) +
+			"|error=" + err.Error())
 		return errors.New("error saving changes")
 	}
 
