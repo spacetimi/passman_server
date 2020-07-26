@@ -12,6 +12,7 @@
     <!-- Required Javascript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js" integrity="sha256-/H4YS+7aYb9kJ5OKhFYPUjSJdrtV6AeyJOtTkw6X72o=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/sha512.js" crossorigin="anonymous"></script>
 
     <!-- CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -60,6 +61,10 @@
 
         function decrypt(encrypted, secret) {
             return CryptoJS.AES.decrypt(encrypted, secret).toString(CryptoJS.enc.Utf8);
+        }
+
+        function sha512(body) {
+            return CryptoJS.SHA512(body).toString(CryptoJS.enc.Base64)
         }
 
         function generatePassword(length) {

@@ -1,3 +1,50 @@
+<script>
+    function addFilePasswordInElementAndSubmit(filePasswordElementName, fileNameElementName, fileElementName, formElementName) {
+
+        var formElement = document.getElementById(formElementName);
+        if (formElement == null) {
+            alert("Something went wrong while trying to submit the request")
+            return;
+        }
+
+        var filePasswordElement = document.getElementById(filePasswordElementName);
+        if (filePasswordElement == null) {
+            alert("Something went wrong while trying to submit the request")
+            return;
+        }
+
+        var fileNameElement = document.getElementById(fileNameElementName);
+        if (fileNameElement == null) {
+            alert("Something went wrong while trying to submit the request")
+            return;
+        }
+        if (fileNameElement.value == "") {
+            alert("File name is required");
+            return;
+        }
+
+        var fileElement = document.getElementById(fileElementName);
+        if (fileElement == null) {
+            alert("Something went wrong while trying to submit the request")
+            return;
+        }
+        if (!fileElement.files.length) {
+            alert("No file selected");
+            return;
+        }
+
+        masterPassword = window.sessionStorage.getItem('pamp');
+        if (masterPassword == null) {
+            window.location.replace("/login");
+            return;
+        }
+
+        filePasswordElement.value = sha512(masterPassword + fileNameElement.value);
+
+        formElement.submit();
+    }
+</script>
+
 <br/>
 <br/>
 
@@ -6,15 +53,9 @@
 
     <div class="row">
         <div class="container-fluid">
-            <form method="POST" action="/addFileToVault" enctype="multipart/form-data" target="_blank">
-
-                <input type="file" name="fileForVault">
-
-                <button type="submit" class="btn btn-block action-button border border-info rounded float-left">
-                    <h5 class="text-muted"><img src="/images/plus.png" style="margin-bottom: 4px">&nbsp;&nbsp;Add New File</h5>
-                </button>
-
-            </form>
+            <button type="button" class="btn btn-block action-button border border-info rounded float-left" data-toggle="modal" data-target="#addNewFileModal">
+                <h5 class="text-muted"><img src="/images/plus.png" style="margin-bottom: 4px">&nbsp;&nbsp;Add New File</h5>
+            </button>
         </div>
     </div>
 
@@ -28,3 +69,45 @@
 
 </div>
 
+
+<!-- Add New File Modal -->
+ <div class="modal fade" id="addNewFileModal" tabindex="-1" role="dialog" aria-labelledby="addNewFileModalTitle" aria-hidden="true">
+     <div class="modal-dialog modal-dialog-centered" role="document">
+         <div class="modal-content">
+             <div class="modal-header bg-dark text-light">
+                 <h5 class="modal-title" id="addNewFileModalTitle">Add New File</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true" class="text-light">&times;</span>
+                 </button>
+             </div>
+
+             <form id="addFileForm" method="post" action="/addFileToVault" enctype="multipart/form-data">
+                 <div class="modal-body">
+                     <div class="form-group">
+
+                         <div class="input-group mb-3">
+                             <div class="input-group-prepend">
+                                 <span class="input-group-text" id="basic-addon1">File Name</span>
+                             </div>
+                             <input type="text" id="newFileName" name="newFileName" class="form-control" placeholder="" aria-label="File Name" aria-describedby="basic-addon1">
+                         </div>
+
+                         <div class="input-group">
+                             <div class="input-group-prepend">
+                                 <span class="input-group-text">File</span>
+                             </div>
+                             <input type="file" id="newFile" name="newFile">
+                         </div>
+
+                         <input type="hidden" id="newFilePassword" name="newFilePassword" value="placeholder-will-be-set-in-javascript">
+
+                     </div>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" id="close_button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                     <button type="button" id="add_new_secret_button" onclick="addFilePasswordInElementAndSubmit('newFilePassword', 'newFileName', 'newFile', 'addFileForm')" class="btn btn-primary">Add</button>
+                 </div>
+             </form>
+         </div>
+     </div>
+ </div>
