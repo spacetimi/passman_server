@@ -24,6 +24,7 @@ type UserFilesBlob struct {
 
 type UserFile struct {
 	FileName              string
+	FileNameWithExtension string
 	FileContentsEncrypted string
 }
 
@@ -55,29 +56,17 @@ func Create(userId int64, ctx context.Context) (*UserFilesBlob, error) {
 	return userFiles, nil
 }
 
-func (blob *UserFilesBlob) GetUserFileContentsByName(fileName string, filePassword string) ([]byte, error) {
-	var userFile *UserFile
-
+func (blob *UserFilesBlob) GetUserFileByName(fileName string) (*UserFile, error) {
 	for _, file := range blob.UserFiles {
 		if file.FileName == fileName {
-			userFile = file
-			break
+			return file, nil
 		}
 	}
 
-	if userFile == nil {
-		return nil, errors.New("no such file")
-	}
-
-	fileContentsDecrypted, err := encryption_utils.DecryptUsingAES(userFile.FileContentsEncrypted, filePassword)
-	if err != nil {
-		return nil, errors.New("error decrypting file, possibly wrong password")
-	}
-
-	return []byte(fileContentsDecrypted), nil
+	return nil, errors.New("no such file")
 }
 
-func (blob *UserFilesBlob) AddOrModifyFile(fileName string, fileContents string, filePassword string, ctx context.Context) error {
+func (blob *UserFilesBlob) AddOrModifyFile(fileName string, fileNameWithExtension string, fileContents string, filePassword string, ctx context.Context) error {
 
 	fileContentsEncrypted, err := encryption_utils.EncryptUsingAES(fileContents, filePassword)
 	if err != nil {
@@ -88,10 +77,11 @@ func (blob *UserFilesBlob) AddOrModifyFile(fileName string, fileContents string,
 		return errors.New("error encrypting file contents")
 	}
 
-	userFile, err := blob.getUserFileByName(fileName)
+	userFile, err := blob.GetUserFileByName(fileName)
 	if err != nil || userFile == nil {
 		userFile = &UserFile{
 			FileName:              fileName,
+			FileNameWithExtension: fileNameWithExtension,
 			FileContentsEncrypted: fileContentsEncrypted,
 		}
 		blob.UserFiles = append(blob.UserFiles, userFile)
@@ -139,6 +129,16 @@ func (blob *UserFilesBlob) DeleteFile(fileName string, ctx context.Context) erro
 	return nil
 }
 
+func (userFile *UserFile) GetUserFileContents(filePassword string) ([]byte, error) {
+
+	fileContentsDecrypted, err := encryption_utils.DecryptUsingAES(userFile.FileContentsEncrypted, filePassword)
+	if err != nil {
+		return nil, errors.New("error decrypting file, possibly wrong password")
+	}
+
+	return []byte(fileContentsDecrypted), nil
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 func newUserFilesBlob(userId int64) *UserFilesBlob {
@@ -152,14 +152,4 @@ func newUserFilesBlob(userId int64) *UserFilesBlob {
 		true)
 
 	return userFiles
-}
-
-func (blob *UserFilesBlob) getUserFileByName(fileName string) (*UserFile, error) {
-	for _, file := range blob.UserFiles {
-		if file.FileName == fileName {
-			return file, nil
-		}
-	}
-
-	return nil, errors.New("no such file")
 }

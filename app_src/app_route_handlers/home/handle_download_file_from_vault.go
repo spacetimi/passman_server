@@ -38,7 +38,7 @@ func (hh *HomeHandler) handleDownloadFileFromVault(user *identity_service.UserBl
 		return
 	}
 
-	userFileContents, err := userFilesBlob.GetUserFileContentsByName(parsedArgs.FileName, parsedArgs.FilePassword)
+	userFile, err := userFilesBlob.GetUserFileByName(parsedArgs.FileName)
 	if err != nil {
 		// Show error message and return
 		messageHeader := "No such file: " + parsedArgs.FileName
@@ -48,10 +48,20 @@ func (hh *HomeHandler) handleDownloadFileFromVault(user *identity_service.UserBl
 		return
 	}
 
-	// Mark the returned content as downloadable to the browser
-	httpResponseWriter.Header().Add("Content-Disposition", "Attachment; filename="+parsedArgs.FileName)
+	userFileContents, err := userFile.GetUserFileContents(parsedArgs.FilePassword)
+	if err != nil {
+		// Show error message and return
+		messageHeader := "Error decrypting file"
+		messageBody := "Possibly wrong password. Please login again and retry"
+		backlinkName := "<< Login"
+		app_simple_message_page.ShowAppSimpleMessagePage(httpResponseWriter, messageHeader, messageBody, app_routes.Login, backlinkName)
+		return
+	}
 
-	http.ServeContent(httpResponseWriter, request, parsedArgs.FileName, time.Now(), bytes.NewReader(userFileContents))
+	// Mark the returned content as downloadable to the browser
+	httpResponseWriter.Header().Add("Content-Disposition", "Attachment; filename="+userFile.FileNameWithExtension)
+
+	http.ServeContent(httpResponseWriter, request, userFile.FileContentsEncrypted, time.Now(), bytes.NewReader(userFileContents))
 }
 
 func parseDownloadFilePostArgs(postArgs map[string]string) (*DownloadFilePostArgs, error) {

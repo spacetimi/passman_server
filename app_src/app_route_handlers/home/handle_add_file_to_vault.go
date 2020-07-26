@@ -31,7 +31,7 @@ func (hh *HomeHandler) handleAddFileToVault(user *identity_service.UserBlob, htt
 	}
 
 	var buffer bytes.Buffer
-	uploadedFile, _, err := request.FormFile("newFile")
+	uploadedFile, uploadedFileHeader, err := request.FormFile("newFile")
 	if err != nil {
 		logger.LogError("error getting file from request for adding to vault" +
 			"|error=" + err.Error())
@@ -62,7 +62,7 @@ func (hh *HomeHandler) handleAddFileToVault(user *identity_service.UserBlob, htt
 		return
 	}
 
-	err = userFilesBlob.AddOrModifyFile(parsedArgs.FileName, fileContents, parsedArgs.FilePassword, request.Context())
+	err = userFilesBlob.AddOrModifyFile(parsedArgs.FileName, uploadedFileHeader.Filename, fileContents, parsedArgs.FilePassword, request.Context())
 	if err != nil {
 		logger.LogError("error add/modify file to vault" +
 			"|user id=" + strconv.FormatInt(user.UserId, 10) +
