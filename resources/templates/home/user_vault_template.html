@@ -62,6 +62,17 @@
     <br/>
 
     <div>
+
+        <div class="container-fluid bg-secondary rounded-top pt-2 pb-2">
+            <h5 class="text-light">&nbsp;My Files</h5>
+        </div>
+
+        <ul class="list-group">
+            {{ range .UserFileCards }}
+                {{ template "user_file_template.html" . }}
+            {{ end }}
+        </ul>
+
     </div>
 
     <br/>

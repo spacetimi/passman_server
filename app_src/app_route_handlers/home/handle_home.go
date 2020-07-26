@@ -5,6 +5,7 @@ import (
 	"sort"
 	"strconv"
 
+	"github.com/spacetimi/passman_server/app_src/data/user_files"
 	"github.com/spacetimi/passman_server/app_src/data/user_secrets"
 	"github.com/spacetimi/passman_server/app_src/data/user_websites"
 	"github.com/spacetimi/timi_shared_server/code/core/controller"
@@ -28,6 +29,16 @@ func (hh *HomeHandler) handleHome(user *identity_service.UserBlob, httpResponseW
 	userSecretsBlob, err := user_secrets.LoadByUserId(user.UserId, request.Context(), true)
 	if err != nil {
 		logger.LogError("error getting user secrets blob" +
+			"|request url=" + request.URL.Path +
+			"|user id=" + strconv.FormatInt(user.UserId, 10) +
+			"|error=" + err.Error())
+		httpResponseWriter.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	userFilesBlob, err := user_files.LoadByUserId(user.UserId, request.Context(), true)
+	if err != nil {
+		logger.LogError("error getting user files blob" +
 			"|request url=" + request.URL.Path +
 			"|user id=" + strconv.FormatInt(user.UserId, 10) +
 			"|error=" + err.Error())
@@ -67,6 +78,18 @@ func (hh *HomeHandler) handleHome(user *identity_service.UserBlob, httpResponseW
 	}
 	sort.Slice(pageObject.UserSecretCards, func(i, j int) bool {
 		return pageObject.UserSecretCards[i].SecretName < pageObject.UserSecretCards[j].SecretName
+	})
+
+	for _, userFile := range userFilesBlob.UserFiles {
+		userFileCard := UserFileCardObject{
+			FileName:        userFile.FileName,
+			FileNameEscaped: string_utils.RemoveSpecialCharactersForHtmlId(userFile.FileName),
+		}
+
+		pageObject.UserFileCards = append(pageObject.UserFileCards, userFileCard)
+	}
+	sort.Slice(pageObject.UserFileCards, func(i, j int) bool {
+		return pageObject.UserFileCards[i].FileName < pageObject.UserFileCards[j].FileName
 	})
 
 	err = hh.Render(httpResponseWriter,

@@ -13,6 +13,7 @@ type HomePageObject struct {
 
 	UserWebsiteCards []UserWebsiteCardObject
 	UserSecretCards  []UserSecretCardObject
+	UserFileCards    []UserFileCardObject
 }
 
 type UserWebsiteCardObject struct {
@@ -29,6 +30,11 @@ type UserAliasCardObject struct {
 type UserSecretCardObject struct {
 	SecretNameEscaped string
 	SecretName        string
+}
+
+type UserFileCardObject struct {
+	FileNameEscaped string
+	FileName        string
 }
 
 type ViewPasswordPageObject struct {
