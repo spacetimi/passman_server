@@ -149,7 +149,7 @@ func newUserFilesBlob(userId int64) *UserFilesBlob {
 		kBlobName,
 		[]string{"UserId"},
 		kVersion,
-		true)
+		false)
 
 	return userFiles
 }
