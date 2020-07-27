@@ -1,6 +1,15 @@
 {
     "SharedMongoURL": "mongodb://localhost:27017",
-    "AppMongoURL": "mongodb://localhost:27017",
+    "SharedPasswordConfig": {
+        "Source": "direct",
+        "K1": ""
+    },
     "SharedDBName": "shared",
+
+    "AppMongoURL": "mongodb://localhost:27017",
+    "AppPasswordConfig": {
+        "Source": "direct",
+        "K1": ""
+    },
     "AppDBName": "passman"
 }

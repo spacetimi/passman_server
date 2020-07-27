@@ -1,4 +1,7 @@
 {
     "RedisURL": "localhost:6379",
-    "RedisPasswd": ""
+    "PasswordConfig": {
+        "Source": "direct",
+        "K1": ""
+    }
 }

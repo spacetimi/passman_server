@@ -1,4 +1,8 @@
 {
     "RedisURL": "redis-18451.c17.us-east-1-4.ec2.cloud.redislabs.com:18451",
-    "RedisPasswd": "netapp1!"
+    "PasswordConfig": {
+        "Source": "AWS_SECRETS",
+        "K1": "db_creds",
+        "K2": "redis_passwd"
+    }
 }
