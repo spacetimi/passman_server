@@ -8,9 +8,6 @@ RUN sed -i -e 's/localhost/host.docker.internal/g' /go/src/github.com/spacetimi/
 RUN sed -i -e 's/localhost/host.docker.internal/g' /go/src/github.com/spacetimi/passman_server/config/services/mongo_adaptor/local.json
 RUN sed -i -e 's/localhost/host.docker.internal/g' /go/src/github.com/spacetimi/passman_server/config/services/redis_adaptor/local.json
 
-# Fetch shared source
-RUN git clone https://github.com/spacetimi/timi_shared_server /go/src/github.com/spacetimi/timi_shared_server
-
 # Build and install the server binary
 RUN cd /go/src/github.com/spacetimi/passman_server && go install /go/src/github.com/spacetimi/passman_server/main/main.go
 
