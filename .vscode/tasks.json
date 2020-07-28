@@ -4,18 +4,23 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "echo",
-            "type": "shell",
-            "command": "echo Hello"
-        },
-        {
-            "label": "build and run",
+            "label": "build and run (local)",
             "type": "shell",
             "command": "timi_build -app=passman_server -env=Local -appdir=. -shareddir=../timi_shared_server -v -run",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
                 "isDefault": true
+            }
+        },
+        {
+            "label": "build and run (prod)",
+            "type": "shell",
+            "command": "timi_build -app=passman_server -env=Production -appdir=. -shareddir=../timi_shared_server -awsprofile=passman-dev -v -run",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
             }
         }
     ]
