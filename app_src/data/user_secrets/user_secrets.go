@@ -117,6 +117,25 @@ func (blob *UserSecretsBlob) DeleteSecret(secretName string, ctx context.Context
 	return nil
 }
 
+func (blob *UserSecretsBlob) ClearData(ctx context.Context) error {
+	if len(blob.UserSecrets) == 0 {
+		return nil
+	}
+	blob.UserSecrets = nil
+
+	// TODO: Avi: Move this somewhere else (like a set-dirty thing for transactions)
+	err := storage_service.SetBlob(blob, ctx)
+	if err != nil {
+		logger.LogError("error saving blob"+
+			"|blob name="+kBlobName+
+			"|user id="+strconv.FormatInt(blob.UserId, 10),
+			"|error="+err.Error())
+		return errors.New("error saving changes")
+	}
+
+	return nil
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 func newUserSecretsBlob(userId int64) *UserSecretsBlob {

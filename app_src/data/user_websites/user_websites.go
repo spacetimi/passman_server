@@ -171,6 +171,25 @@ func (blob *UserWebsitesBlob) DeleteUserWebsite(websiteName string, ctx context.
 	return nil
 }
 
+func (blob *UserWebsitesBlob) ClearData(ctx context.Context) error {
+	if len(blob.UserWebsites) == 0 {
+		return nil
+	}
+	blob.UserWebsites = nil
+
+	// TODO: Avi: Move this somewhere else (like a set-dirty thing for transactions)
+	err := storage_service.SetBlob(blob, ctx)
+	if err != nil {
+		logger.LogError("error saving blob"+
+			"|blob name="+kBlobName+
+			"|user id="+strconv.FormatInt(blob.UserId, 10),
+			"|error="+err.Error())
+		return errors.New("error saving changes")
+	}
+
+	return nil
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 func newUserWebsitesBlob(userId int64) *UserWebsitesBlob {

@@ -8,6 +8,9 @@ import (
 
 	"github.com/spacetimi/passman_server/app_src/app_routes"
 	"github.com/spacetimi/passman_server/app_src/app_utils/app_simple_message_page"
+	"github.com/spacetimi/passman_server/app_src/data/user_files"
+	"github.com/spacetimi/passman_server/app_src/data/user_secrets"
+	"github.com/spacetimi/passman_server/app_src/data/user_websites"
 	"github.com/spacetimi/passman_server/app_src/login"
 	"github.com/spacetimi/timi_shared_server/code/core/adaptors/redis_adaptor"
 	"github.com/spacetimi/timi_shared_server/code/core/controller"
@@ -100,7 +103,60 @@ func tryResetPassword(user *identity_service.UserBlob, postArgs map[string]strin
 			"|error=" + err.Error())
 	}
 
+	// Also, clear all user data since they cannot be recovered with our client-driven encryption anyway
+	clearAllUserData(user.UserId, ctx)
+
 	return nil
+}
+
+func clearAllUserData(userId int64, ctx context.Context) {
+	{
+		userWebsites, err := user_websites.LoadByUserId(userId, ctx, true)
+		if err != nil {
+			logger.LogError("error fetching user websites blob when trying to reset password" +
+				"|user id=" + strconv.FormatInt(userId, 10) +
+				"|error=" + err.Error())
+		} else {
+			err = userWebsites.ClearData(ctx)
+			if err != nil {
+				logger.LogError("error clearing user websites data on reset password" +
+					"|user id=" + strconv.FormatInt(userId, 10) +
+					"|error=" + err.Error())
+			}
+		}
+	}
+
+	{
+		userSecrets, err := user_secrets.LoadByUserId(userId, ctx, true)
+		if err != nil {
+			logger.LogError("error fetching user secrets blob when trying to reset password" +
+				"|user id=" + strconv.FormatInt(userId, 10) +
+				"|error=" + err.Error())
+		} else {
+			err = userSecrets.ClearData(ctx)
+			if err != nil {
+				logger.LogError("error clearing user secrets data on reset password" +
+					"|user id=" + strconv.FormatInt(userId, 10) +
+					"|error=" + err.Error())
+			}
+		}
+	}
+
+	{
+		userFiles, err := user_files.LoadByUserId(userId, ctx, true)
+		if err != nil {
+			logger.LogError("error fetching user files blob when trying to reset password" +
+				"|user id=" + strconv.FormatInt(userId, 10) +
+				"|error=" + err.Error())
+		} else {
+			err = userFiles.ClearData(ctx)
+			if err != nil {
+				logger.LogError("error clearing user files data on reset password" +
+					"|user id=" + strconv.FormatInt(userId, 10) +
+					"|error=" + err.Error())
+			}
+		}
+	}
 }
 
 func parsePostArgsForResetPassword(postArgs map[string]string) (string, error) {
