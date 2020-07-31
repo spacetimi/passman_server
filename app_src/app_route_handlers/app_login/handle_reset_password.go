@@ -90,6 +90,16 @@ func tryResetPassword(user *identity_service.UserBlob, postArgs map[string]strin
 		return errors.New("* Error updating password. Please try again")
 	}
 
+	// Also mark the email address as verified
+	// in case the user clicked on reset password immediately after account creation
+	// (i.e. without logging in even once)
+	err = identity_service.SetUserEmailAddressVerified(user, ctx)
+	if err != nil {
+		logger.LogError("error marking user email-address as verified" +
+			"|user id=" + strconv.FormatInt(user.UserId, 10) +
+			"|error=" + err.Error())
+	}
+
 	return nil
 }
 
