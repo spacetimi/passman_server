@@ -111,6 +111,8 @@ github.com/spacetimi/timi_shared_server v1.0.1 h1:nEbEd7ncI/jmO5OnQdinM/tyOsF4O2
 github.com/spacetimi/timi_shared_server v1.0.1/go.mod h1:S+/S1PfYSl25z6vjRlt1D5tIAgLEHd6Q3TGSmpH3vXk=
 github.com/spacetimi/timi_shared_server v1.1.0 h1:krPOSPqjVP9QcyT1uyXsy8fa7SVLDKsBaQFMc6YgEbQ=
 github.com/spacetimi/timi_shared_server v1.1.0/go.mod h1:S+/S1PfYSl25z6vjRlt1D5tIAgLEHd6Q3TGSmpH3vXk=
+github.com/spacetimi/timi_shared_server v1.1.1 h1:Lo+jYcDpEilEtGFkW6oQA3djTO9QWvZo/R0yVcJ0Fy0=
+github.com/spacetimi/timi_shared_server v1.1.1/go.mod h1:S+/S1PfYSl25z6vjRlt1D5tIAgLEHd6Q3TGSmpH3vXk=
 github.com/spf13/cobra v0.0.3/go.mod h1:1l0Ry5zgKvJasoi3XT1TypsSe7PqH0Sj9dhYf7v3XqQ=
 github.com/spf13/pflag v1.0.3/go.mod h1:DYY7MBk1bdzusC3SYhjObp+wFpr4gzcvqqNjLnInEg4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
