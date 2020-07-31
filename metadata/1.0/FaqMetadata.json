@@ -1,12 +1,32 @@
 {
     "FaqItems": [
         {
-            "Question": "Why did the chicken cross the road?",
-            "Answer": "To get to the other side"
+            "Question": "How safe is my master-password?",
+            "Answer": "Very. Your master-password never even reaches our servers. That's one of the advantages of client-side encryption."
         },
         {
-            "Question": "Why did the cat cross the road?",
-            "Answer": "It was a copy cat"
+            "Question": "How complicated should my master-password be?",
+            "Answer": "As complicated as you can make it and still remember it."
+        },
+        {
+            "Question": "What kind of encryption do you use?",
+            "Answer": "AES Ciphers - which is considered pretty good according to people who understand cryptography way better than I do"
+        },
+        {
+            "Question": "How do we trust you(Passman)?",
+            "Answer": "You don't have to. Here's the source-code: https://github.com/spacetimi/passman_server"
+        },
+        {
+            "Question": "Is Passman open-source?",
+            "Answer": "Yes. Here's the source-code: https://github.com/spacetimi/passman_server"
+        },
+        {
+            "Question": "Can I contribute?",
+            "Answer": "Please do. Shoot an email to avi@spacetimi.com"
+        },
+        {
+            "Question": "What happens if I forget my master-password?",
+            "Answer": "Nothing great. You will lose your saved passwords, secrets, and files on Passman. We cannot help you recover your data because, like we said, we literally cannot read your data."
         }
     ]
 }
